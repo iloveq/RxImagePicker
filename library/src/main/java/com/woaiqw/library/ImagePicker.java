@@ -3,6 +3,7 @@ package com.woaiqw.library;
 import com.woaiqw.library.helper.RequestBuilder;
 import com.woaiqw.library.helper.ResultBuilder;
 import com.woaiqw.library.listener.ImagePickerResultListener;
+import com.woaiqw.library.model.Result;
 
 /**
  * Created by haoran on 2018/10/11.
@@ -28,9 +29,11 @@ public class ImagePicker {
     }
 
 
-    public void onResult(ImagePickerResultListener listener) {
+    public Result onResult(ImagePickerResultListener listener) {
 
         result.setListener(listener);
+
+        return result.build();
 
     }
 

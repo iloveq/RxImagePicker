@@ -1,8 +1,9 @@
 package com.woaiqw.library.view;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
-import android.support.annotation.ColorInt;
+import android.support.annotation.StyleRes;
+
+import com.woaiqw.library.annotation.ResultType;
 
 import java.lang.ref.WeakReference;
 
@@ -13,32 +14,26 @@ public class ImageChooseUI {
 
     WeakReference<? extends Activity> source;
 
-    int themeResId;
+    @StyleRes
+    int theme;
 
     int gridColumns;
 
-    public ImageChooseUI(WeakReference<? extends Activity> source, int gridColumns) {
+    @ResultType
+    int resultType;
+
+    public ImageChooseUI(WeakReference<? extends Activity> source, @StyleRes int theme, int gridColumns, int resultType) {
         this.source = source;
+        this.theme = theme;
         this.gridColumns = gridColumns;
-        themeResId = getColorBackground(source.get());
-
-
-    }
-
-    private @ColorInt
-    int getColorBackground(Activity activity) {
-        int[] attrs = new int[]{android.R.attr.colorBackground};
-        TypedArray typedArray = activity.obtainStyledAttributes(attrs);
-        int color = typedArray.getColor(0, 0xfffafafa);
-        typedArray.recycle();
-        return color;
+        this.resultType = resultType;
     }
 
     public void createUI() {
-        if (source == null || themeResId == 0) {
-            throw new RuntimeException(" source or themeResId must be createFactory ");
+        if (source == null || theme == 0) {
+            throw new RuntimeException(" source or theme must be createFactory ");
         }
-        ImageChooseActivity.startImageChooseActivity(source, themeResId, gridColumns);
+        ImageChooseActivity.startImageChooseActivity(source, theme, gridColumns, resultType);
     }
 
 

@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
                 ImagePicker
                         .in(MainActivity.this)
                         .createFactory()
+                        .setGridColumn(4)
+                        .setTheme(R.style.AppTheme)
                         .setResultType(ResultType.URI)
                         .onResult(new ImagePickerResultListener() {
                             @Override

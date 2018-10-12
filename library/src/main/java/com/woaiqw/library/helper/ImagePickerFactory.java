@@ -1,6 +1,7 @@
 package com.woaiqw.library.helper;
 
 import android.app.Activity;
+import android.support.annotation.StyleRes;
 
 import com.woaiqw.library.ImagePicker;
 import com.woaiqw.library.annotation.ResultType;
@@ -18,16 +19,12 @@ public class ImagePickerFactory {
 
     ImageChooseUI ui;
 
-    @ResultType
-    int resultType;
-
     ImagePickerResultListener listener;
 
 
     public ImagePickerFactory(Builder builder) {
         this.picker = builder.picker;
         this.ui = builder.ui;
-        this.resultType = builder.resultType;
         this.listener = builder.listener;
     }
 
@@ -36,23 +33,30 @@ public class ImagePickerFactory {
 
         private static final int COLUMNS_DEFAULT = 3;
         private final ImagePicker picker;
-        private int gridColumns;
-        private ImageChooseUI ui;
-        private ImagePickerResultListener listener;
+        private int gridColumn;
+        private @StyleRes
+        int theme;
         private @ResultType
         int resultType;
+        private ImageChooseUI ui;
+        private ImagePickerResultListener listener;
 
-        private ImageChooseUI initImageChooseUI(WeakReference<? extends Activity> source, int gridColumns) {
-            return new ImageChooseUI(source, gridColumns);
+        private ImageChooseUI initImageChooseUI(WeakReference<? extends Activity> source, int theme, int gridColumn, @ResultType int resultType) {
+            return new ImageChooseUI(source,theme, gridColumn, resultType);
         }
 
         public Builder(ImagePicker picker) {
             this.picker = picker;
-            this.gridColumns = COLUMNS_DEFAULT;
+            this.gridColumn = COLUMNS_DEFAULT;
         }
 
-        public Builder setGridColums(int gridColumns) {
-            this.resultType = gridColumns;
+        public Builder setTheme(@StyleRes int theme) {
+            this.theme = theme;
+            return this;
+        }
+
+        public Builder setGridColumn(int gridColumn) {
+            this.resultType = gridColumn;
             return this;
         }
 
@@ -68,7 +72,7 @@ public class ImagePickerFactory {
 
 
         public ImagePickerFactory build() {
-            this.ui = initImageChooseUI(picker.getSource(), gridColumns);
+            this.ui = initImageChooseUI(picker.getSource(), gridColumn,theme, resultType);
             ui.createUI();
             return new ImagePickerFactory(this);
         }

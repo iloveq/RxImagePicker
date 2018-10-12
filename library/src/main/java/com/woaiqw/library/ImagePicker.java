@@ -13,7 +13,6 @@ public class ImagePicker {
 
     private static volatile ImagePicker IN = null;
     private WeakReference<? extends Activity> source;
-    private ImagePickerFactory.Builder builder;
 
 
     private ImagePicker(Activity activity) {
@@ -35,10 +34,13 @@ public class ImagePicker {
 
 
     public ImagePickerFactory.Builder createFactory() {
-        return builder = new ImagePickerFactory.Builder(this);
+        return new ImagePickerFactory.Builder(this);
     }
 
     public WeakReference<? extends Activity> getSource() {
+        if (source == null) {
+            throw new RuntimeException(" must init ImagePicker ");
+        }
         return source;
     }
 

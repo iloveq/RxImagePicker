@@ -3,7 +3,6 @@ package com.woaiqw.library.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,7 +14,7 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 /**
  * Created by haoran on 2018/10/12.
  */
-public abstract class ToolbarActivity extends AppCompatActivity {
+public abstract class ToolbarActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private LinearLayout VIEW;
@@ -48,6 +47,7 @@ public abstract class ToolbarActivity extends AppCompatActivity {
 
     /**
      * a containerView in contentView
+     *
      * @return View
      */
     public abstract View hookContentView();

@@ -1,10 +1,13 @@
 package com.woaiqw.library.helper;
 
+import android.app.Activity;
+
 import com.woaiqw.library.ImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
-import com.woaiqw.library.view.ImageChooseActivity;
 import com.woaiqw.library.view.ImageChooseUI;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by haoran on 2018/10/12.
@@ -40,7 +43,11 @@ public class ImagePickerFactory {
 
         public Builder(ImagePicker picker) {
             this.picker = picker;
-            this.ui = ImageChooseActivity.createImageChooseUI(picker.getSource());
+            this.ui = createImageChooseUI(picker.getSource());
+        }
+
+        private ImageChooseUI createImageChooseUI(WeakReference<? extends Activity> source) {
+            return new ImageChooseUI(source);
         }
 
         public Builder setResultType(@ResultType int type) {

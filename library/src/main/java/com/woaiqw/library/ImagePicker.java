@@ -56,7 +56,7 @@ public class ImagePicker {
         return builder;
     }
 
-    public Activity getSource() {
-        return source.get();
+    public WeakReference<? extends Activity> getSource() {
+        return source;
     }
 }

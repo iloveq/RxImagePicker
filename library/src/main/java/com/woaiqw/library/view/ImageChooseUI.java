@@ -33,7 +33,7 @@ public class ImageChooseUI {
         if (source == null || theme == 0) {
             throw new RuntimeException(" source or theme must be createFactory ");
         }
-        ImageChooseActivity.startImageChooseActivity(source, theme, gridColumns, resultType);
+        ImageChooseActivity.startImageChooseActivityForResult(source, theme, gridColumns, resultType);
     }
 
 

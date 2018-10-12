@@ -9,40 +9,37 @@ import com.woaiqw.library.ImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ImagePicker
-                        .in(MainActivity.this)
-                        .createFactory()
-                        .setGridColumn(4)
-                        .setTheme(R.style.AppTheme)
-                        .setResultType(ResultType.URI)
-                        .onResult(new ImagePickerResultListener() {
-                            @Override
-                            public void onSelected(Object o) {
-
-                            }
-
-                            @Override
-                            public void onTakePhoto(Object o) {
-
-                            }
-                        })
-                        .build();
-
-            }
-        });
+        findViewById(R.id.tv).setOnClickListener(this);
 
 
     }
 
+    @Override
+    public void onClick(View v) {
+        ImagePicker
+                .in(MainActivity.this)
+                .createFactory()
+                .setGridColumn(4)
+                .setTheme(R.style.AppTheme)
+                .setResultType(ResultType.URI)
+                .onResult(new ImagePickerResultListener() {
+                    @Override
+                    public void onSelected(Object o) {
+
+                    }
+
+                    @Override
+                    public void onTakePhoto(Object o) {
+
+                    }
+                })
+                .build();
+    }
 }

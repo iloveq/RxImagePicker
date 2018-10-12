@@ -34,20 +34,26 @@ public class ImagePickerFactory {
 
     public static class Builder {
 
+        private static final int COLUMNS_DEFAULT = 3;
         private final ImagePicker picker;
+        private int gridColumns;
         private ImageChooseUI ui;
         private ImagePickerResultListener listener;
         private @ResultType
         int resultType;
 
+        private ImageChooseUI initImageChooseUI(WeakReference<? extends Activity> source, int gridColumns) {
+            return new ImageChooseUI(source, gridColumns);
+        }
 
         public Builder(ImagePicker picker) {
             this.picker = picker;
-            this.ui = createImageChooseUI(picker.getSource());
+            this.gridColumns = COLUMNS_DEFAULT;
         }
 
-        private ImageChooseUI createImageChooseUI(WeakReference<? extends Activity> source) {
-            return new ImageChooseUI(source);
+        public Builder setGridColums(int gridColumns) {
+            this.resultType = gridColumns;
+            return this;
         }
 
         public Builder setResultType(@ResultType int type) {
@@ -62,8 +68,11 @@ public class ImagePickerFactory {
 
 
         public ImagePickerFactory build() {
+            this.ui = initImageChooseUI(picker.getSource(), gridColumns);
+            ui.createUI();
             return new ImagePickerFactory(this);
         }
+
     }
 
 

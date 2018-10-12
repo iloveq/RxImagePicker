@@ -2,9 +2,7 @@ package com.woaiqw.library;
 
 import android.app.Activity;
 
-import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.helper.ImagePickerFactory;
-import com.woaiqw.library.listener.ImagePickerResultListener;
 
 import java.lang.ref.WeakReference;
 
@@ -20,7 +18,7 @@ public class ImagePicker {
 
     private ImagePicker(Activity activity) {
         source = new WeakReference<>(activity);
-        builder = new ImagePickerFactory.Builder(this);
+
     }
 
 
@@ -36,27 +34,12 @@ public class ImagePicker {
     }
 
 
-    public ImagePickerFactory.Builder createChooseUI() {
-        return builder;
-    }
-
-
-    public ImagePickerFactory.Builder onResult(ImagePickerResultListener listener) {
-
-        builder.onResult(listener);
-        builder.build();
-        return builder;
-
-    }
-
-    public ImagePickerFactory.Builder setResultType(@ResultType int type) {
-
-        builder.setResultType(type);
-
-        return builder;
+    public ImagePickerFactory.Builder createFactory() {
+        return builder = new ImagePickerFactory.Builder(this);
     }
 
     public WeakReference<? extends Activity> getSource() {
         return source;
     }
+
 }

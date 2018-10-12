@@ -15,19 +15,20 @@ import java.lang.ref.WeakReference;
  */
 public class ImageChooseActivity extends AppCompatActivity {
 
-    private WeakReference<? extends Activity> source;
+    private static final String THEME_RES_ID = "themeResId";
+    private static final String GRID_COLUMN = "gridColumns";
 
-    public static void startImageChooseActivity(ImageChooseUI ui) {
-    /*    decorate(ui);
-        ui.body.startActivity(new Intent(ui.body, ImageChooseActivity.class));*/
+    public static void startImageChooseActivity(WeakReference<? extends Activity> source, int themeResId,int gridColumns) {
+        Intent intent = new Intent(source.get(), ImageChooseActivity.class);
+        intent.putExtra(THEME_RES_ID, themeResId);
+        intent.putExtra(GRID_COLUMN,gridColumns);
+        source.get().startActivity(intent);
     }
 
-    private  void decorate(ImageChooseUI ui) {
-        this.source = ui.source;
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(getIntent().getIntExtra(THEME_RES_ID, R.style.Default));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_image);
     }

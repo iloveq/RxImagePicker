@@ -1,2 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.woaiqw.library" />
+    package="com.woaiqw.library" >
+
+    <application
+        >
+        <activity android:name=".view.ImageChooseActivity"
+            android:launchMode="singleTop"
+            />
+    </application>
+
+</manifest>

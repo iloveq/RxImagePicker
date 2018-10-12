@@ -1,40 +1,62 @@
 package com.woaiqw.library;
 
-import com.woaiqw.library.helper.RequestBuilder;
-import com.woaiqw.library.helper.ResultBuilder;
+import android.app.Activity;
+
+import com.woaiqw.library.annotation.ResultType;
+import com.woaiqw.library.helper.ImagePickerFactory;
 import com.woaiqw.library.listener.ImagePickerResultListener;
-import com.woaiqw.library.model.Result;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by haoran on 2018/10/11.
  */
 public class ImagePicker {
 
-    private ResultBuilder result;
-    private RequestBuilder request;
+    private static volatile ImagePicker IN = null;
+    private WeakReference<? extends Activity> source;
+    private ImagePickerFactory.Builder builder;
 
 
-    private ImagePicker() {
-        request = new RequestBuilder();
-        result = new ResultBuilder();
-    }
-
-    private static class Holder {
-        private static final ImagePicker IN = new ImagePicker();
+    private ImagePicker(Activity activity) {
+        source = new WeakReference<>(activity);
+        builder = new ImagePickerFactory.Builder(this);
     }
 
 
-    public static ImagePicker create() {
-        return Holder.IN;
+    public static ImagePicker in(Activity activity) {
+        if (null == IN) {
+            synchronized (ImagePicker.class) {
+                if (null == IN) {
+                    IN = new ImagePicker(activity);
+                }
+            }
+        }
+        return IN;
     }
 
 
-    public Result onResult(ImagePickerResultListener listener) {
+    public ImagePickerFactory.Builder createChooseUI() {
+        return builder;
+    }
 
-        result.setListener(listener);
 
-        return result.build();
+    public ImagePickerFactory.Builder onResult(ImagePickerResultListener listener) {
+
+        builder.onResult(listener);
+        builder.build();
+        return builder;
 
     }
 
+    public ImagePickerFactory.Builder setResultType(@ResultType int type) {
+
+        builder.setResultType(type);
+
+        return builder;
+    }
+
+    public Activity getSource() {
+        return source.get();
+    }
 }

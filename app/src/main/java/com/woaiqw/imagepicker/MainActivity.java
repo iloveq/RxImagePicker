@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.woaiqw.library.ImagePicker;
+import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 
 public class MainActivity extends AppCompatActivity implements ImagePickerResultListener {
@@ -14,7 +15,10 @@ public class MainActivity extends AppCompatActivity implements ImagePickerResult
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImagePicker.create().onResult(this);
+        ImagePicker
+                .in(MainActivity.this)
+                .setResultType(ResultType.URI)
+                .onResult(this);
 
     }
 

@@ -3,7 +3,7 @@ package com.woaiqw.library.helper;
 import android.app.Activity;
 import android.support.annotation.StyleRes;
 
-import com.woaiqw.library.ImagePicker;
+import com.woaiqw.library.RxImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 import com.woaiqw.library.view.ImageChooseUI;
@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
  */
 public class ImagePickerFactory {
 
-    ImagePicker picker;
+    RxImagePicker picker;
 
     ImageChooseUI ui;
 
@@ -32,7 +32,7 @@ public class ImagePickerFactory {
     public static class Builder {
 
         private static final int COLUMNS_DEFAULT = 3;
-        private final ImagePicker picker;
+        private final RxImagePicker picker;
         private int gridColumn;
         private @StyleRes
         int theme;
@@ -45,7 +45,7 @@ public class ImagePickerFactory {
             return new ImageChooseUI(source,theme, gridColumn, resultType);
         }
 
-        public Builder(ImagePicker picker) {
+        public Builder(RxImagePicker picker) {
             this.picker = picker;
             this.gridColumn = COLUMNS_DEFAULT;
         }

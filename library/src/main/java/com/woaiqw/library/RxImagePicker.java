@@ -9,23 +9,23 @@ import java.lang.ref.WeakReference;
 /**
  * Created by haoran on 2018/10/11.
  */
-public class ImagePicker {
+public class RxImagePicker {
 
-    private static volatile ImagePicker IN = null;
+    private static volatile RxImagePicker IN = null;
     private WeakReference<? extends Activity> source;
 
 
-    private ImagePicker(Activity activity) {
+    private RxImagePicker(Activity activity) {
         source = new WeakReference<>(activity);
 
     }
 
 
-    public static ImagePicker in(Activity activity) {
+    public static RxImagePicker in(Activity activity) {
         if (null == IN) {
-            synchronized (ImagePicker.class) {
+            synchronized (RxImagePicker.class) {
                 if (null == IN) {
-                    IN = new ImagePicker(activity);
+                    IN = new RxImagePicker(activity);
                 }
             }
         }
@@ -39,7 +39,7 @@ public class ImagePicker {
 
     public WeakReference<? extends Activity> getSource() {
         if (source == null) {
-            throw new RuntimeException(" must init ImagePicker ");
+            throw new RuntimeException(" must init RxImagePicker ");
         }
         return source;
     }

@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.woaiqw.library.ImagePicker;
+import com.woaiqw.library.RxImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        ImagePicker
+        RxImagePicker
                 .in(MainActivity.this)
                 .createFactory()
                 .setGridColumn(4)

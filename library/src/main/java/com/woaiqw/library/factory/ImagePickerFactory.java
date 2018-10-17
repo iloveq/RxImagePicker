@@ -1,4 +1,4 @@
-package com.woaiqw.library.helper;
+package com.woaiqw.library.factory;
 
 import android.app.Activity;
 import android.support.annotation.StyleRes;

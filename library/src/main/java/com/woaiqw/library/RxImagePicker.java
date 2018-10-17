@@ -2,7 +2,7 @@ package com.woaiqw.library;
 
 import android.app.Activity;
 
-import com.woaiqw.library.helper.ImagePickerFactory;
+import com.woaiqw.library.factory.ImagePickerFactory;
 
 import java.lang.ref.WeakReference;
 

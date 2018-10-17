@@ -10,8 +10,13 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.woaiqw.library.base.ToolbarActivity;
+import com.woaiqw.library.controller.ImageController;
+import com.woaiqw.library.factory.ImagePickerFactory;
+import com.woaiqw.library.model.Image;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.woaiqw.library.util.Constants.GRID_COLUMN;
 import static com.woaiqw.library.util.Constants.REQUEST_CODER;
@@ -25,6 +30,9 @@ public class ImageChooseActivity extends ToolbarActivity {
 
 
     private GridView grid;
+    private List<Image> list = new ArrayList<>();
+    private GridAdapter gridAdapter;
+
 
     public static void startImageChooseActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType) {
         Intent intent = new Intent(source.get(), ImageChooseActivity.class);
@@ -46,6 +54,19 @@ public class ImageChooseActivity extends ToolbarActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gridAdapter = new GridAdapter(this, list, ImagePickerFactory.getImageLoader());
+        grid.setAdapter(gridAdapter);
+        ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
+            @Override
+            public void onSuccess(List<Image> images) {
+                gridAdapter.setData(list);
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
 
 
     }

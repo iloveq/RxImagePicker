@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ImageController {
 
     public final class ForceLoadContentObserver extends ContentObserver {
-        public ForceLoadContentObserver() {
+        ForceLoadContentObserver() {
             super(new Handler());
         }
 
@@ -42,26 +42,28 @@ public class ImageController {
 
         @Override
         public void onChange(boolean selfChange) {
-
+            release();
         }
     }
 
     private CompositeDisposable disposable;
-    private final String[] IMAGE_INFO = {     //查询图片需要的数据列
-            MediaStore.Images.Media.DISPLAY_NAME,   //图片的显示名称  aaa.jpg
-            MediaStore.Images.Media.DATA,           //图片的真实路径  /storage/emulated/0/pp/downloader/wallpaper/aaa.jpg
-            MediaStore.Images.Media.SIZE,           //图片的大小，long型  132492
-            MediaStore.Images.Media.WIDTH,          //图片的宽度，int型  1920
-            MediaStore.Images.Media.HEIGHT,         //图片的高度，int型  1080
-            MediaStore.Images.Media.MIME_TYPE,      //图片的类型     image/jpeg
-            MediaStore.Images.Media.DATE_ADDED};    //图片被添加的时间，long型  1450518608
-    CancellationSignal mCancellationSignal;
+    private final String[] IMAGE_INFO = {
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.SIZE,
+            MediaStore.Images.Media.WIDTH,
+            MediaStore.Images.Media.HEIGHT,
+            MediaStore.Images.Media.MIME_TYPE,
+            MediaStore.Images.Media.DATE_ADDED
+    };
 
-    final ForceLoadContentObserver mObserver;
+    CancellationSignal cancelSignal;
+
+    final ForceLoadContentObserver contentObserver;
 
     private ImageController() {
-        mObserver = new ForceLoadContentObserver();
-        mCancellationSignal = new CancellationSignal();
+        contentObserver = new ForceLoadContentObserver();
+        cancelSignal = new CancellationSignal();
         disposable = new CompositeDisposable();
     }
 
@@ -84,13 +86,13 @@ public class ImageController {
         Observable observable = Observable.create(new ObservableOnSubscribe<Cursor>() {
             @Override
             public void subscribe(ObservableEmitter<Cursor> emitter) {
-                Cursor cursor = ContentResolverCompat.query(context.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_INFO, null,
-                        null, IMAGE_INFO[6] + " DESC", mCancellationSignal);
+                Cursor cursor = ContentResolverCompat.query(context.getContentResolver(),
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_INFO, null,
+                        null, IMAGE_INFO[6] + " DESC", cancelSignal);
                 if (cursor != null) {
                     try {
-                        // Ensure the cursor window is filled.
                         cursor.getCount();
-                        cursor.registerContentObserver(mObserver);
+                        cursor.registerContentObserver(contentObserver);
                     } catch (RuntimeException ex) {
                         cursor.close();
                         throw ex;
@@ -117,7 +119,6 @@ public class ImageController {
                         int imageHeight = data.getInt(data.getColumnIndexOrThrow(IMAGE_INFO[4]));
                         String imageMimeType = data.getString(data.getColumnIndexOrThrow(IMAGE_INFO[5]));
                         long imageAddTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_INFO[6]));
-                        //封装实体
                         Image Image = new Image();
                         Image.name = imageName;
                         Image.path = imagePath;
@@ -127,7 +128,6 @@ public class ImageController {
                         Image.mimeType = imageMimeType;
                         Image.addTime = imageAddTime;
                         list.add(Image);
-                        //根据父路径分类存放图片
                         File imageFile = new File(imagePath);
                         File imageParentFile = imageFile.getParentFile();
                         Album album = new Album();
@@ -162,6 +162,5 @@ public class ImageController {
     public void release() {
         disposable.dispose();
     }
-
 
 }

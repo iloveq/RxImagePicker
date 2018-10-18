@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.woaiqw.base.common.PermissionActivity;
+import com.woaiqw.base.utils.ImageLoader;
 import com.woaiqw.base.utils.PermissionListener;
-import com.woaiqw.library.ImageLoader;
+import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.RxImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
@@ -40,10 +41,10 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .in(MainActivity.this)
                         .createFactory()
                         .setGridColumn(4)
-                        .setImageLoader(new ImageLoader<ImageView>() {
+                        .setImageLoader(new ImageLoaderInterface<ImageView>() {
                             @Override
                             public void displayImage(Context context, Object path, ImageView imageView) {
-                                com.woaiqw.base.utils.ImageLoader.loadImage(context, imageView, (String) path);
+                                ImageLoader.loadImage(context, imageView, (String) path);
                             }
                         })
                         .setTheme(R.style.AppTheme)

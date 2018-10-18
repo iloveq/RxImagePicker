@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.woaiqw.library.ImageLoader;
+import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.R;
 import com.woaiqw.library.model.Image;
 
@@ -20,9 +20,9 @@ public class GridAdapter extends BaseAdapter {
 
     private List<Image> list;
     private Context context;
-    private ImageLoader<ImageView> loader;
+    private ImageLoaderInterface<ImageView> loader;
 
-    public GridAdapter(Context context, List<Image> list, ImageLoader<ImageView> loader) {
+    public GridAdapter(Context context, List<Image> list, ImageLoaderInterface<ImageView> loader) {
         this.list = list;
         this.context = context;
         this.loader = loader;

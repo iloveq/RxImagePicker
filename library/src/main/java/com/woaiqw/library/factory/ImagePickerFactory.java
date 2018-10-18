@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.annotation.StyleRes;
 import android.widget.ImageView;
 
-import com.woaiqw.library.ImageLoader;
+import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.RxImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
@@ -23,7 +23,7 @@ public class ImagePickerFactory {
 
     ImagePickerResultListener listener;
 
-    ImageLoader<ImageView> loader;
+    ImageLoaderInterface<ImageView> loader;
 
 
     public ImagePickerFactory(Builder builder) {
@@ -33,7 +33,7 @@ public class ImagePickerFactory {
         this.listener = builder.listener;
     }
 
-    public static ImageLoader<ImageView> getImageLoader() {
+    public static ImageLoaderInterface<ImageView> getImageLoader() {
         return null;
     }
 
@@ -43,7 +43,7 @@ public class ImagePickerFactory {
         private static final int COLUMNS_DEFAULT = 3;
         private final RxImagePicker picker;
         private int gridColumn;
-        private ImageLoader<ImageView> loader;
+        private ImageLoaderInterface<ImageView> loader;
         private @StyleRes
         int theme;
         private @ResultType
@@ -70,7 +70,7 @@ public class ImagePickerFactory {
             return this;
         }
 
-        public Builder setImageLoader(ImageLoader<ImageView> loader) {
+        public Builder setImageLoader(ImageLoaderInterface<ImageView> loader) {
             this.loader = loader;
             return this;
         }

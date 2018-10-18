@@ -15,6 +15,7 @@ import com.woaiqw.library.adapter.GridRVAdapter;
 import com.woaiqw.library.base.ToolbarActivity;
 import com.woaiqw.library.controller.ImageController;
 import com.woaiqw.library.factory.ImagePickerFactory;
+import com.woaiqw.library.listener.OnItemClickListener;
 import com.woaiqw.library.model.Image;
 
 import java.lang.ref.WeakReference;
@@ -28,7 +29,7 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 /**
  * Created by haoran on 2018/10/12.
  */
-public class ImageChooseActivity extends ToolbarActivity {
+public class ImageChooseActivity extends ToolbarActivity implements OnItemClickListener {
 
 
     private RecyclerView rv;
@@ -59,6 +60,7 @@ public class ImageChooseActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), i);
         rv.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
             @Override
             public void onSuccess(List<Image> images) {
@@ -81,5 +83,11 @@ public class ImageChooseActivity extends ToolbarActivity {
     protected void onDestroy() {
         super.onDestroy();
         ImageController.get().release();
+    }
+
+
+    @Override
+    public void onClickItem(View view, int position) {
+
     }
 }

@@ -51,7 +51,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .setResultType(ResultType.URI)
                         .onPicked(new ImagePickerResultListener() {
                             @Override
-                            public void onPicked(Object o) {
+                            public void onPicked(List o) {
 
                             }
 

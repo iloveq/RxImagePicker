@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.R;
+import com.woaiqw.library.listener.OnItemClickListener;
 import com.woaiqw.library.model.Image;
 import com.woaiqw.library.util.UIUtils;
 
@@ -22,8 +23,10 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     private List<Image> list;
     private Context context;
     private ImageLoaderInterface<ImageView> loader;
+    private OnItemClickListener listener;
     private int margin;
     private int L;
+    private boolean canTakePhoto;
 
     public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i) {
         this.list = new ArrayList<>();
@@ -50,12 +53,23 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
     @Override
     public void onBindViewHolder(GridViewHolder holder, int position) {
+        final int currentPos = holder.getAdapterPosition();
+        holder.iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClickItem(v,currentPos);
+            }
+        });
         loader.displayImage(context, list.get(position).path, holder.iv);
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     class GridViewHolder extends RecyclerView.ViewHolder {

@@ -74,8 +74,6 @@ public class ImageController {
     }
 
 
-    private ImageControllerListener listener;
-
     private static final class Holder {
         private static final ImageController IN = new ImageController();
     }
@@ -91,7 +89,6 @@ public class ImageController {
 
     public void getSource(final Context context, final ImageControllerListener listener) {
         final List<Image> list = new ArrayList<>();
-        this.listener = listener;
         Disposable disposable = Observable.create(new ObservableOnSubscribe<Cursor>() {
             @Override
             public void subscribe(ObservableEmitter<Cursor> emitter) {
@@ -116,12 +113,10 @@ public class ImageController {
                     while (data.moveToNext()) {
                         String imageName = data.getString(data.getColumnIndexOrThrow(IMAGE_INFO[0]));
                         String imagePath = data.getString(data.getColumnIndexOrThrow(IMAGE_INFO[1]));
-
                         File file = new File(imagePath);
                         if (!file.exists() || file.length() <= 0) {
                             continue;
                         }
-
                         long imageSize = data.getLong(data.getColumnIndexOrThrow(IMAGE_INFO[2]));
                         int imageWidth = data.getInt(data.getColumnIndexOrThrow(IMAGE_INFO[3]));
                         int imageHeight = data.getInt(data.getColumnIndexOrThrow(IMAGE_INFO[4]));

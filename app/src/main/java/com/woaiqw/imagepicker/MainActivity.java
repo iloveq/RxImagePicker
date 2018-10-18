@@ -7,14 +7,16 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.woaiqw.base.common.PermissionActivity;
-import com.woaiqw.base.utils.ImageLoader;
+import com.woaiqw.base.utils.GlideApp;
 import com.woaiqw.base.utils.PermissionListener;
 import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.RxImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends PermissionActivity implements View.OnClickListener {
@@ -43,8 +45,12 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .setGridColumn(4)
                         .setImageLoader(new ImageLoaderInterface<ImageView>() {
                             @Override
-                            public void displayImage(Context context, Object path, ImageView imageView) {
-                                ImageLoader.loadImage(context, imageView, (String) path);
+                            public void displayImage(Context context, Object o, ImageView imageView) {
+                                String path = (String) o;
+                                File file = new File(path);
+                                GlideApp.with(context).load(file).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
+
+
                             }
                         })
                         .setTheme(R.style.AppTheme)

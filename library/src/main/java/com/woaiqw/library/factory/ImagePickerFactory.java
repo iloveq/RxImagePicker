@@ -23,18 +23,18 @@ public class ImagePickerFactory {
 
     ImagePickerResultListener listener;
 
-    ImageLoaderInterface<ImageView> loader;
+    static ImageLoaderInterface<ImageView> loader;
 
 
-    public ImagePickerFactory(Builder builder) {
-        this.loader = builder.loader;
+    ImagePickerFactory(Builder builder) {
+        loader = builder.loader;
         this.picker = builder.picker;
         this.ui = builder.ui;
         this.listener = builder.listener;
     }
 
     public static ImageLoaderInterface<ImageView> getImageLoader() {
-        return null;
+        return loader;
     }
 
 
@@ -66,7 +66,7 @@ public class ImagePickerFactory {
         }
 
         public Builder setGridColumn(int gridColumn) {
-            this.resultType = gridColumn;
+            this.gridColumn = gridColumn;
             return this;
         }
 
@@ -87,7 +87,7 @@ public class ImagePickerFactory {
 
 
         public ImagePickerFactory build() {
-            this.ui = initImageChooseUI(picker.getSource(), gridColumn, theme, resultType);
+            this.ui = initImageChooseUI(picker.getSource(), theme, gridColumn, resultType);
             ui.createUI();
             return new ImagePickerFactory(this);
         }

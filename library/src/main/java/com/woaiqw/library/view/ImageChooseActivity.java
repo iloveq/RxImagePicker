@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.woaiqw.library.base.ToolbarActivity;
 import com.woaiqw.library.controller.ImageController;
@@ -15,7 +17,6 @@ import com.woaiqw.library.factory.ImagePickerFactory;
 import com.woaiqw.library.model.Image;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.woaiqw.library.util.Constants.GRID_COLUMN;
@@ -29,9 +30,9 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 public class ImageChooseActivity extends ToolbarActivity {
 
 
-    private GridView grid;
-    private List<Image> list = new ArrayList<>();
-    private GridAdapter gridAdapter;
+    private RecyclerView rv;
+    private GridRVAdapter adapter;
+    private int i;
 
 
     public static void startImageChooseActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType) {
@@ -44,30 +45,35 @@ public class ImageChooseActivity extends ToolbarActivity {
 
     @Override
     public View hookContentView() {
-        grid = new GridView(this);
-        grid.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        grid.setNumColumns(getIntent().getIntExtra(GRID_COLUMN, 3));
-        return grid;
+        rv = new RecyclerView(this);
+        rv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        i = getIntent().getIntExtra(GRID_COLUMN, 3);
+        rv.setLayoutManager(new GridLayoutManager(this, i));
+        return rv;
     }
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gridAdapter = new GridAdapter(this, list, ImagePickerFactory.getImageLoader());
-        grid.setAdapter(gridAdapter);
+        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), i);
+        rv.setAdapter(adapter);
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
             @Override
             public void onSuccess(List<Image> images) {
-                gridAdapter.setData(list);
+                if (images==null||images.size()==0){
+                    Toast.makeText(ImageChooseActivity.this, "相册还没有照片哦！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                adapter.setData(images);
             }
 
             @Override
             public void onError(String msg) {
-
+                Toast.makeText(ImageChooseActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
 
-
     }
+
 }

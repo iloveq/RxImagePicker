@@ -57,6 +57,7 @@ public class ImagePickerFactory {
 
         public Builder(RxImagePicker picker) {
             this.picker = picker;
+            this.loader = picker.getLoader();
             this.gridColumn = COLUMNS_DEFAULT;
         }
 
@@ -67,11 +68,6 @@ public class ImagePickerFactory {
 
         public Builder setGridColumn(int gridColumn) {
             this.gridColumn = gridColumn;
-            return this;
-        }
-
-        public Builder setImageLoader(ImageLoaderInterface<ImageView> loader) {
-            this.loader = loader;
             return this;
         }
 

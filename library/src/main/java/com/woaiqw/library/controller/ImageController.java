@@ -30,6 +30,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ImageController {
 
+    private Disposable d;
+
     public interface ImageControllerListener {
         void onSuccess(List<Image> images);
 
@@ -89,7 +91,7 @@ public class ImageController {
 
     public void getSource(final Context context, final ImageControllerListener listener) {
         final List<Image> list = new ArrayList<>();
-        Disposable disposable = Observable.create(new ObservableOnSubscribe<Cursor>() {
+        d = Observable.create(new ObservableOnSubscribe<Cursor>() {
             @Override
             public void subscribe(ObservableEmitter<Cursor> emitter) {
                 Cursor cursor = ContentResolverCompat.query(context.getContentResolver(),
@@ -147,11 +149,12 @@ public class ImageController {
                 listener.onError(throwable.getMessage());
             }
         });
-        attach(disposable);
+        attach(d);
     }
 
     public void release() {
-        disposable.dispose();
+        if (d != null)
+            disposable.remove(d);
     }
 
 }

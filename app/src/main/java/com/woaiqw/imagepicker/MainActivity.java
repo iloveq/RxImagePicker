@@ -16,7 +16,6 @@ import com.woaiqw.library.RxImagePicker;
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 
-import java.io.File;
 import java.util.List;
 
 public class MainActivity extends PermissionActivity implements View.OnClickListener {
@@ -40,19 +39,14 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
             @Override
             public void onGranted() {
                 RxImagePicker
-                        .in(MainActivity.this)
-                        .createFactory()
-                        .setGridColumn(4)
-                        .setImageLoader(new ImageLoaderInterface<ImageView>() {
+                        .in(MainActivity.this, new ImageLoaderInterface<ImageView>() {
                             @Override
-                            public void displayImage(Context context, Object o, ImageView imageView) {
-                                String path = (String) o;
-                                File file = new File(path);
-                                GlideApp.with(context).load(file).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
-
-
+                            public void displayImage(Context context, String path, ImageView imageView) {
+                                GlideApp.with(context).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
                             }
                         })
+                        .createFactory()
+                        .setGridColumn(4)
                         .setTheme(R.style.AppTheme)
                         .setResultType(ResultType.URI)
                         .onResult(new ImagePickerResultListener() {

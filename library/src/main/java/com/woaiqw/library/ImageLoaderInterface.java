@@ -8,6 +8,6 @@ import android.view.View;
  */
 public interface ImageLoaderInterface<T extends View> {
 
-    void displayImage(Context context, Object path, T imageView);
+    void displayImage(Context context, String path, T imageView);
 
 }

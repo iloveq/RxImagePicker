@@ -61,7 +61,7 @@ public class ImageChooseActivity extends ToolbarActivity {
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
             @Override
             public void onSuccess(List<Image> images) {
-                if (images==null||images.size()==0){
+                if (images == null || images.size() == 0) {
                     Toast.makeText(ImageChooseActivity.this, "相册还没有照片哦！", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -76,4 +76,9 @@ public class ImageChooseActivity extends ToolbarActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageController.get().release();
+    }
 }

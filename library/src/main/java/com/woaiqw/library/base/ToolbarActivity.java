@@ -46,7 +46,7 @@ public abstract class ToolbarActivity extends BaseActivity {
     }
 
     /**
-     * a containerView in contentView
+     * a containerView source contentView
      *
      * @return View
      */

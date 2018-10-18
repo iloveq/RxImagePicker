@@ -23,7 +23,7 @@ public class RxImagePicker {
     }
 
 
-    public static RxImagePicker in(Activity activity, ImageLoaderInterface<ImageView> loaderInterface) {
+    public static RxImagePicker source(Activity activity, ImageLoaderInterface<ImageView> loaderInterface) {
         if (null == IN) {
             synchronized (RxImagePicker.class) {
                 if (null == IN) {

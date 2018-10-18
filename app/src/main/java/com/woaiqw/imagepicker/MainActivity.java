@@ -39,14 +39,14 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
             @Override
             public void onGranted() {
                 RxImagePicker
-                        .in(MainActivity.this, new ImageLoaderInterface<ImageView>() {
+                        .source(MainActivity.this, new ImageLoaderInterface<ImageView>() {
                             @Override
                             public void displayImage(Context context, String path, ImageView imageView) {
                                 GlideApp.with(context).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
                             }
                         })
                         .createFactory()
-                        .setGridColumn(4)
+                        .setGridColumn(5)
                         .setTheme(R.style.AppTheme)
                         .setResultType(ResultType.URI)
                         .onPicked(new ImagePickerResultListener() {

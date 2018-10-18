@@ -1,4 +1,4 @@
-package com.woaiqw.library.view;
+package com.woaiqw.library.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +25,7 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     private int margin;
     private int L;
 
-    GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i) {
+    public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i) {
         this.list = new ArrayList<>();
         this.context = context;
         this.loader = loader;

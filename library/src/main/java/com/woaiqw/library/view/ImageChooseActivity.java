@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.woaiqw.library.adapter.GridRVAdapter;
 import com.woaiqw.library.base.ToolbarActivity;
 import com.woaiqw.library.controller.ImageController;
 import com.woaiqw.library.factory.ImagePickerFactory;

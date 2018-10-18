@@ -5,8 +5,8 @@ package com.woaiqw.library.listener;
  */
 public interface ImagePickerResultListener<T> {
 
-    void onSelected(T t);
+    void onPicked(T t);
 
-    void onTakePhoto(T t);
+    void onPhotoTook(T t);
 
 }

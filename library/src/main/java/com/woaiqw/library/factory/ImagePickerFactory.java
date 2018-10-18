@@ -76,7 +76,7 @@ public class ImagePickerFactory {
             return this;
         }
 
-        public Builder onResult(ImagePickerResultListener listener) {
+        public Builder onPicked(ImagePickerResultListener listener) {
             this.listener = listener;
             return this;
         }

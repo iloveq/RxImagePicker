@@ -49,14 +49,14 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .setGridColumn(4)
                         .setTheme(R.style.AppTheme)
                         .setResultType(ResultType.URI)
-                        .onResult(new ImagePickerResultListener() {
+                        .onPicked(new ImagePickerResultListener() {
                             @Override
-                            public void onSelected(Object o) {
+                            public void onPicked(Object o) {
 
                             }
 
                             @Override
-                            public void onTakePhoto(Object o) {
+                            public void onPhotoTook(Object o) {
 
                             }
                         })

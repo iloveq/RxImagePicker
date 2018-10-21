@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -27,10 +28,12 @@ public abstract class ToolbarActivity extends BaseActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         VIEW.setLayoutParams(params);
         toolbar = new Toolbar(this);
+        int theme = getIntent().getIntExtra(THEME_RES_ID, R.style.Default);
+        setTheme(theme);
+        toolbar.setBackgroundColor(getColorPrimary());
         VIEW.addView(toolbar, 0);
         VIEW.addView(hookContentView(), 1);
         setContentView(VIEW);
-        setTheme(getIntent().getIntExtra(THEME_RES_ID, R.style.Default));
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -51,5 +54,12 @@ public abstract class ToolbarActivity extends BaseActivity {
      * @return View
      */
     public abstract View hookContentView();
+
+    public int getColorPrimary(){
+        TypedValue typedValue = new  TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        return typedValue.data;
+    }
+
 
 }

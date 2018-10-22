@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.R;
@@ -20,13 +21,13 @@ import java.util.List;
  */
 public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHolder> {
 
+    private static final int VIEW_TYPE_FIRST = -1;
     private List<Image> list;
     private Context context;
     private ImageLoaderInterface<ImageView> loader;
     private OnItemClickListener listener;
     private int margin;
     private int L;
-    private boolean canTakePhoto;
 
     public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i) {
         this.list = new ArrayList<>();
@@ -47,25 +48,39 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? VIEW_TYPE_FIRST : position;
+    }
+
+    @Override
     public GridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new GridViewHolder(View.inflate(context, R.layout.item_grid, null));
+        return new GridViewHolder(viewType != VIEW_TYPE_FIRST ? View.inflate(context, R.layout.item_grid, null) : View.inflate(context, R.layout.item_grid_first, null), viewType);
     }
 
     @Override
     public void onBindViewHolder(GridViewHolder holder, int position) {
         final int currentPos = holder.getAdapterPosition();
-        holder.iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClickItem(v,currentPos);
-            }
-        });
-        loader.displayImage(context, list.get(position).path, holder.iv);
+        if (position != 0) {
+            holder.iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClickItem(v, currentPos - 1);
+                }
+            });
+            loader.displayImage(context, list.get(position - 1).path, holder.iv);
+        } else {
+            holder.tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClickTakePhoto(v);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.size() + 1;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -74,16 +89,23 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
     class GridViewHolder extends RecyclerView.ViewHolder {
         private ImageView iv;
+        private TextView tv;
 
-        GridViewHolder(View itemView) {
+        GridViewHolder(View itemView, int viewType) {
             super(itemView);
-            iv = itemView.findViewById(R.id.iv);
             RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.width = L;
             params.height = L;
             int i = margin / 2;
             params.setMargins(i, i, i, i);
-            iv.setLayoutParams(params);
+            if (viewType != VIEW_TYPE_FIRST) {
+                iv = itemView.findViewById(R.id.iv);
+                iv.setLayoutParams(params);
+            } else {
+                tv = itemView.findViewById(R.id.camera);
+                tv.setLayoutParams(params);
+            }
+
 
         }
     }

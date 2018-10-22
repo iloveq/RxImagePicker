@@ -88,6 +88,11 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
 
     @Override
     public void onClickItem(View view, int position) {
+        Toast.makeText(this, "item：" + position, Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onClickTakePhoto(View v) {
+        Toast.makeText(this, "take photo", Toast.LENGTH_SHORT).show();
     }
 }

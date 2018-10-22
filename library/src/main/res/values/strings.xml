@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">library</string>
     <string name="all_images">所有图片</string>
+    <string name="take_photo">点击拍照</string>
 </resources>

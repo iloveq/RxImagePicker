@@ -68,7 +68,9 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
                 @Override
                 public void onClick(View v) {
                     listener.onClickItem(v, currentPos - 1);
-                    holder.cv.setChecked(true);
+                    boolean flag = list.get(currentPos - 1).checked;
+                    holder.cv.setChecked(!flag);
+                    list.get(currentPos - 1).checked = !flag;
                 }
             });
             loader.displayImage(context, list.get(position - 1).path, holder.iv);

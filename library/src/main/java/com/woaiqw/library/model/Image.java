@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 public class Image implements Parcelable {
 
+    public boolean checked;
     public String name;
     public String path;
     public long size;

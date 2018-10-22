@@ -21,20 +21,24 @@ public class ImagePickerFactory {
 
     ImageChooseUI ui;
 
-    ImagePickerResultListener listener;
+    static ImagePickerResultListener listener;
 
     static ImageLoaderInterface<ImageView> loader;
 
 
     ImagePickerFactory(Builder builder) {
         loader = builder.loader;
+        listener = builder.listener;
         this.picker = builder.picker;
         this.ui = builder.ui;
-        this.listener = builder.listener;
     }
 
     public static ImageLoaderInterface<ImageView> getImageLoader() {
         return loader;
+    }
+
+    public static ImagePickerResultListener getImagePickerResultListener() {
+        return listener;
     }
 
 

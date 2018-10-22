@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.woaiqw.library.R;
 import com.woaiqw.library.adapter.GridRVAdapter;
 import com.woaiqw.library.base.ToolbarActivity;
 import com.woaiqw.library.controller.ImageController;
@@ -36,6 +36,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
 
     private RecyclerView rv;
     private GridRVAdapter adapter;
+    private TextView footer_left, footer_right;
     private int i;
 
 
@@ -49,12 +50,15 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     }
 
     @Override
-    public View hookContentView() {
-        rv = new RecyclerView(this);
-        rv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    public void setBodyView(View body) {
+        rv = body.findViewById(R.id.rv);
+        footer_left = body.findViewById(R.id.footer_left);
+        footer_right = body.findViewById(R.id.footer_right);
+        footer_left.setText("预览");
+        footer_right.setText("使用");
         i = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, i));
-        return rv;
+
     }
 
 
@@ -82,6 +86,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
 
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -93,6 +98,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     @Override
     public void onClickItem(View view, int position) {
         Toast.makeText(this, "item：" + position, Toast.LENGTH_SHORT).show();
+        footer_right.setText("使用(" + Counter.getInstance().getCount() + ")");
     }
 
     @Override

@@ -36,7 +36,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
 
     private RecyclerView rv;
     private GridRVAdapter adapter;
-    private TextView footer_left, footer_right;
+    private TextView bottom_left, bottom_right;
     private int column;
 
 
@@ -52,10 +52,10 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     @Override
     public void onBodyCreated(View body, @Nullable Bundle savedInstanceState) {
         rv = body.findViewById(R.id.rv);
-        footer_left = body.findViewById(R.id.footer_left);
-        footer_right = body.findViewById(R.id.footer_right);
-        footer_left.setText("预览");
-        footer_right.setText("使用");
+        bottom_left = body.findViewById(R.id.footer_left);
+        bottom_right = body.findViewById(R.id.footer_right);
+        bottom_left.setText("预览");
+        bottom_right.setText("使用");
         column = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, column));
         adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), column, getIntent().getIntExtra(RESULT_NUM, 1));
@@ -90,7 +90,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     @Override
     public void onClickItem(View view, int position) {
         Toast.makeText(this, "item：" + position, Toast.LENGTH_SHORT).show();
-        footer_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+        bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
     }
 
     @Override

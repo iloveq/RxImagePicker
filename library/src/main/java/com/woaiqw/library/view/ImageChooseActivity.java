@@ -16,6 +16,7 @@ import com.woaiqw.library.base.ToolbarActivity;
 import com.woaiqw.library.controller.ImageController;
 import com.woaiqw.library.factory.ImagePickerFactory;
 import com.woaiqw.library.listener.OnItemClickListener;
+import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
 
 import java.lang.ref.WeakReference;
@@ -85,6 +86,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     protected void onDestroy() {
         super.onDestroy();
         ImageController.get().release();
+        Counter.getInstance().reset();
     }
 
 

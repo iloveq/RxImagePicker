@@ -31,7 +31,7 @@ public class Counter {
         return count;
     }
 
-    public void reset(int count) {
+    public void reset() {
         this.count = 0;
     }
 }

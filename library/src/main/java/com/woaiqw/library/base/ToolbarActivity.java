@@ -23,7 +23,7 @@ public abstract class ToolbarActivity extends BaseActivity {
         setTheme(theme);
         setContentView(R.layout.activity_toolbar);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setBodyView(findViewById(R.id.body));
+        onBodyCreated(findViewById(R.id.body), savedInstanceState);
         toolbar.setBackgroundColor(getColorPrimary());
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -39,7 +39,7 @@ public abstract class ToolbarActivity extends BaseActivity {
         });
     }
 
-    public abstract void setBodyView(View body);
+    public abstract void onBodyCreated(View body, @Nullable Bundle savedInstanceState);
 
     public int getColorPrimary() {
         TypedValue typedValue = new TypedValue();

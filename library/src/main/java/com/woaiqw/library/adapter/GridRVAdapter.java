@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.woaiqw.library.ImageLoaderInterface;
@@ -12,6 +14,7 @@ import com.woaiqw.library.R;
 import com.woaiqw.library.listener.OnItemClickListener;
 import com.woaiqw.library.model.Image;
 import com.woaiqw.library.util.UIUtils;
+import com.woaiqw.library.view.CheckView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +61,14 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     }
 
     @Override
-    public void onBindViewHolder(GridViewHolder holder, int position) {
+    public void onBindViewHolder(final GridViewHolder holder, int position) {
         final int currentPos = holder.getAdapterPosition();
         if (position != 0) {
             holder.iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onClickItem(v, currentPos - 1);
+                    holder.cv.setChecked(true);
                 }
             });
             loader.displayImage(context, list.get(position - 1).path, holder.iv);
@@ -88,8 +92,11 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     }
 
     class GridViewHolder extends RecyclerView.ViewHolder {
+        private FrameLayout ff_container;
+        private LinearLayout ll_container;
         private ImageView iv;
         private TextView tv;
+        private CheckView cv;
 
         GridViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -99,13 +106,16 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
             int i = margin / 2;
             params.setMargins(i, i, i, i);
             if (viewType != VIEW_TYPE_FIRST) {
+                ff_container = itemView.findViewById(R.id.ff_container);
                 iv = itemView.findViewById(R.id.iv);
-                iv.setLayoutParams(params);
+                cv = itemView.findViewById(R.id.check_view);
+                ff_container.setLayoutParams(params);
+                cv.setEnabled(true);
             } else {
+                ll_container = itemView.findViewById(R.id.ll_container);
                 tv = itemView.findViewById(R.id.camera);
-                tv.setLayoutParams(params);
+                ll_container.setLayoutParams(params);
             }
-
 
         }
     }

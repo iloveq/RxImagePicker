@@ -10,4 +10,6 @@ public interface OnItemClickListener {
     void onClickItem(View view, int position);
 
     void onClickTakePhoto(View v);
+
+    void onClickItemOutOfRange(int range);
 }

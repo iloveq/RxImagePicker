@@ -46,8 +46,9 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                             }
                         })
                         .createFactory()
-                        .setGridColumn(5)
+                        .setGridColumn(3)
                         .setTheme(R.style.AppTheme)
+                        .setPickedNum(5)
                         .setResultType(ResultType.URI)
                         .onPicked(new ImagePickerResultListener() {
                             @Override

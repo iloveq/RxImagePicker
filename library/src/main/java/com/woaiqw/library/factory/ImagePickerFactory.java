@@ -50,13 +50,14 @@ public class ImagePickerFactory {
         private ImageLoaderInterface<ImageView> loader;
         private @StyleRes
         int theme;
+        int pickedNum;
         private @ResultType
         int resultType;
         private ImageChooseUI ui;
         private ImagePickerResultListener listener;
 
-        private ImageChooseUI initImageChooseUI(WeakReference<? extends Activity> source, int theme, int gridColumn, @ResultType int resultType) {
-            return new ImageChooseUI(source, theme, gridColumn, resultType);
+        private ImageChooseUI initImageChooseUI(WeakReference<? extends Activity> source, int theme, int gridColumn, @ResultType int resultType, int pickedNum) {
+            return new ImageChooseUI(source, theme, gridColumn, resultType,pickedNum);
         }
 
         public Builder(RxImagePicker picker) {
@@ -75,6 +76,11 @@ public class ImagePickerFactory {
             return this;
         }
 
+        public Builder setPickedNum(int pickedNum) {
+            this.pickedNum = pickedNum;
+            return this;
+        }
+
         public Builder setResultType(@ResultType int type) {
             this.resultType = type;
             return this;
@@ -87,7 +93,7 @@ public class ImagePickerFactory {
 
 
         public ImagePickerFactory build() {
-            this.ui = initImageChooseUI(picker.getSource(), theme, gridColumn, resultType);
+            this.ui = initImageChooseUI(picker.getSource(), theme, gridColumn, resultType,pickedNum);
             ui.createUI();
             return new ImagePickerFactory(this);
         }

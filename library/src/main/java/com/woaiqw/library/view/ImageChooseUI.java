@@ -22,18 +22,21 @@ public class ImageChooseUI {
     @ResultType
     int resultType;
 
-    public ImageChooseUI(WeakReference<? extends Activity> source, @StyleRes int theme, int gridColumns, int resultType) {
+    int pickedNum;
+
+    public ImageChooseUI(WeakReference<? extends Activity> source, @StyleRes int theme, int gridColumns, int resultType,int pickedNum) {
         this.source = source;
         this.theme = theme;
         this.gridColumns = gridColumns;
         this.resultType = resultType;
+        this.pickedNum = pickedNum;
     }
 
     public void createUI() {
         if (source == null || theme == 0) {
             throw new RuntimeException(" source or theme must be createFactory ");
         }
-        ImageChooseActivity.startImageChooseActivityForResult(source, theme, gridColumns, resultType);
+        ImageChooseActivity.startImageChooseActivityForResult(source, theme, gridColumns, resultType,pickedNum);
     }
 
 

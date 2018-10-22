@@ -23,6 +23,7 @@ import java.util.List;
 
 import static com.woaiqw.library.util.Constants.GRID_COLUMN;
 import static com.woaiqw.library.util.Constants.REQUEST_CODER;
+import static com.woaiqw.library.util.Constants.RESULT_NUM;
 import static com.woaiqw.library.util.Constants.RESULT_TYPE;
 import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 
@@ -37,11 +38,12 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     private int i;
 
 
-    public static void startImageChooseActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType) {
+    public static void startImageChooseActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType, int pickedNum) {
         Intent intent = new Intent(source.get(), ImageChooseActivity.class);
         intent.putExtra(THEME_RES_ID, themeResId);
         intent.putExtra(GRID_COLUMN, gridColumns);
         intent.putExtra(RESULT_TYPE, resultType);
+        intent.putExtra(RESULT_NUM, pickedNum);
         source.get().startActivityForResult(intent, REQUEST_CODER);
     }
 
@@ -58,7 +60,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), i);
+        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), i, getIntent().getIntExtra(RESULT_NUM, 1));
         rv.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
@@ -94,5 +96,10 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
     @Override
     public void onClickTakePhoto(View v) {
         Toast.makeText(this, "take photo", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClickItemOutOfRange(int range) {
+        Toast.makeText(this, "超出了可选范围：" + range, Toast.LENGTH_SHORT).show();
     }
 }

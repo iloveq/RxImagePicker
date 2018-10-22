@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.R;
 import com.woaiqw.library.listener.OnItemClickListener;
+import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
 import com.woaiqw.library.util.UIUtils;
 import com.woaiqw.library.view.CheckView;
@@ -29,13 +30,17 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     private Context context;
     private ImageLoaderInterface<ImageView> loader;
     private OnItemClickListener listener;
+    private Counter counter;
     private int margin;
     private int L;
+    private int pickedNum;
 
-    public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i) {
+    public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i, int num) {
         this.list = new ArrayList<>();
         this.context = context;
         this.loader = loader;
+        this.pickedNum = num;
+        counter = Counter.getInstance();
         margin = UIUtils.dp2px(context, 3);
         L = (UIUtils.getScreenWidth(context) / i) - margin;
     }
@@ -67,10 +72,19 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
             holder.iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onClickItem(v, currentPos - 1);
                     boolean flag = list.get(currentPos - 1).checked;
+                    if (flag) {
+                        counter.decrease();
+                    } else {
+                        counter.increase();
+                    }
+                    if (counter.getCount() > pickedNum) {
+                        listener.onClickItemOutOfRange(pickedNum);
+                        return;
+                    }
                     holder.cv.setChecked(!flag);
                     list.get(currentPos - 1).checked = !flag;
+                    listener.onClickItem(v, currentPos - 1);
                 }
             });
             loader.displayImage(context, list.get(position - 1).path, holder.iv);

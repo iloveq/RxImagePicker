@@ -11,6 +11,7 @@ public class Constants {
     public static final String THEME_RES_ID = "theme";
     public static final String GRID_COLUMN = "columns";
     public static final String RESULT_TYPE = "resultType";
+    public static final String RESULT_NUM = "num";
 
     /**
      * request code

@@ -80,9 +80,11 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
                 boolean flag = list.get(currentPos).checked;
                 if (flag) {
                     checkView.setChecked(false);
+                    Counter.getInstance().decrease();
                     Counter.getInstance().resetCheckedStatus(list.get(currentPos), false);
                     list.get(currentPos).checked = false;
                 } else {
+                    Counter.getInstance().increase();
                     checkView.setChecked(true);
                     Counter.getInstance().resetCheckedStatus(list.get(currentPos), true);
                     list.get(currentPos).checked = true;

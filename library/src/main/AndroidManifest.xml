@@ -7,7 +7,7 @@
 
     <application>
         <activity
-            android:name=".view.ImageChooseActivity"
+            android:name=".view.ImageChooseGridActivity"
             android:launchMode="singleTop"
             android:theme="@style/Default" />
     </application>

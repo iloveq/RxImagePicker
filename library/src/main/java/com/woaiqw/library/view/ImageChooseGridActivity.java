@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.woaiqw.library.R;
 import com.woaiqw.library.adapter.GridRVAdapter;
-import com.woaiqw.library.base.ToolbarActivity;
+import com.woaiqw.library.base.ToolbarListActivity;
 import com.woaiqw.library.controller.ImageController;
 import com.woaiqw.library.factory.ImagePickerFactory;
 import com.woaiqw.library.listener.OnItemClickListener;
@@ -31,7 +31,7 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 /**
  * Created by haoran on 2018/10/12.
  */
-public class ImageChooseActivity extends ToolbarActivity implements OnItemClickListener {
+public class ImageChooseGridActivity extends ToolbarListActivity implements OnItemClickListener {
 
 
     private RecyclerView rv;
@@ -41,7 +41,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
 
 
     public static void startImageChooseActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType, int pickedNum) {
-        Intent intent = new Intent(source.get(), ImageChooseActivity.class);
+        Intent intent = new Intent(source.get(), ImageChooseGridActivity.class);
         intent.putExtra(THEME_RES_ID, themeResId);
         intent.putExtra(GRID_COLUMN, gridColumns);
         intent.putExtra(RESULT_TYPE, resultType);
@@ -58,14 +58,14 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
         bottom_right.setText("使用");
         column = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, column));
-        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), column, getIntent().getIntExtra(RESULT_NUM, 1));
+        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), column, getIntent().getIntExtra(RESULT_NUM, 1), getColorPrimary());
         rv.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
             @Override
             public void onSuccess(List<Image> images) {
                 if (images == null || images.size() == 0) {
-                    Toast.makeText(ImageChooseActivity.this, "相册还没有照片哦！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ImageChooseGridActivity.this, "相册还没有照片哦！", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 adapter.setData(images);
@@ -73,7 +73,7 @@ public class ImageChooseActivity extends ToolbarActivity implements OnItemClickL
 
             @Override
             public void onError(String msg) {
-                Toast.makeText(ImageChooseActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ImageChooseGridActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

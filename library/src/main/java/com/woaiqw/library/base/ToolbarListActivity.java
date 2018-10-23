@@ -4,24 +4,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.View;
 
 import com.woaiqw.library.R;
 
-import static com.woaiqw.library.util.Constants.THEME_RES_ID;
-
 /**
  * Created by haoran on 2018/10/12.
  */
-public abstract class ToolbarActivity extends BaseActivity {
+public abstract class ToolbarListActivity extends ThemeActivity {
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int theme = getIntent().getIntExtra(THEME_RES_ID, R.style.Default);
-        setTheme(theme);
-        setContentView(R.layout.activity_toolbar);
+        setContentView(R.layout.activity_toolbar_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         onBodyCreated(findViewById(R.id.body), savedInstanceState);
         toolbar.setBackgroundColor(getColorPrimary());
@@ -40,12 +36,6 @@ public abstract class ToolbarActivity extends BaseActivity {
     }
 
     public abstract void onBodyCreated(View body, @Nullable Bundle savedInstanceState);
-
-    public int getColorPrimary() {
-        TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-        return typedValue.data;
-    }
 
 
 }

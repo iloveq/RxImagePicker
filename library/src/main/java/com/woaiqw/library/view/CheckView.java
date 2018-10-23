@@ -41,6 +41,7 @@ public class CheckView extends View {
     private float mDensity;
     private Rect mCheckRect;
     private boolean mEnabled = true;
+    private int defalutColor = Color.parseColor("#1E8AE8");
 
     public CheckView(Context context) {
         super(context);
@@ -83,6 +84,10 @@ public class CheckView extends View {
         }
         mChecked = checked;
         invalidate();
+    }
+
+    public void setBackGroundDefaultColor(int color){
+        defalutColor = color;
     }
 
     public void setCountable(boolean countable) {
@@ -174,7 +179,7 @@ public class CheckView extends View {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setAntiAlias(true);
             mBackgroundPaint.setStyle(Paint.Style.FILL);
-            mBackgroundPaint.setColor(Color.parseColor("#1E8AE8"));
+            mBackgroundPaint.setColor(defalutColor);
         }
     }
 

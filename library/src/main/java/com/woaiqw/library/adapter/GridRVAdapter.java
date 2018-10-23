@@ -34,12 +34,14 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     private int margin;
     private int L;
     private int pickedNum;
+    private int checkViewBgColor;
 
-    public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i, int num) {
+    public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i, int num, int colorPrimary) {
         this.list = new ArrayList<>();
         this.context = context;
         this.loader = loader;
         this.pickedNum = num;
+        this.checkViewBgColor = colorPrimary;
         counter = Counter.getInstance();
         margin = UIUtils.dp2px(context, 3);
         L = (UIUtils.getScreenWidth(context) / i) - margin;
@@ -127,6 +129,7 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
                 cv = itemView.findViewById(R.id.check_view);
                 ff_container.setLayoutParams(params);
                 cv.setEnabled(true);
+                cv.setBackGroundDefaultColor(checkViewBgColor);
             } else {
                 ll_container = itemView.findViewById(R.id.ll_container);
                 tv = itemView.findViewById(R.id.camera);

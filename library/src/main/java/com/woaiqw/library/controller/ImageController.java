@@ -190,6 +190,7 @@ public class ImageController {
                         resultListener.onException(throwable.getMessage());
                     }
                 });
+                attach(result);
                 break;
             case ResultType.URI:
                 List<Uri> resultOfUri = new ArrayList<>();

@@ -107,6 +107,14 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     public void onClick(View v) {
         // 预览
-        PreviewChooseActivity.startPreviewChooseActivityForResult(this, getColorPrimary());
+        PreviewChooseActivity.startPreviewChooseActivityForResult(this, getThemeResId());
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adapter!=null)
+            adapter.refresh();
     }
 }

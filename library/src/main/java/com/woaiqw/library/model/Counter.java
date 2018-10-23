@@ -39,8 +39,8 @@ public class Counter {
         this.count = 0;
     }
 
-    public ArrayList<Image> getCheckedList() {
-        ArrayList<Image> checkedList = new ArrayList<>();
+    public List<Image> getCheckedList() {
+        List<Image> checkedList = new ArrayList<>();
         for (Image image : list) {
             if (image.checked) {
                 checkedList.add(image);
@@ -60,5 +60,15 @@ public class Counter {
 
     public List<Image> getList() {
         return list;
+    }
+
+    public void resetCheckedStatus(Image image) {
+        for (Image image1 : list) {
+            if (image != null && image1 != null) {
+                if (image.equals(image1)) {
+                    image1.checked = false;
+                }
+            }
+        }
     }
 }

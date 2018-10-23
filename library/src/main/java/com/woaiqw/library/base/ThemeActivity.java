@@ -14,11 +14,17 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
  */
 public class ThemeActivity extends AppCompatActivity {
 
+    private int theme;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int theme = getIntent().getIntExtra(THEME_RES_ID, R.style.Default);
+        theme = getIntent().getIntExtra(THEME_RES_ID, R.style.Default);
         setTheme(theme);
+    }
+
+    public int getThemeResId() {
+        return theme;
     }
 
     public int getColorPrimary() {

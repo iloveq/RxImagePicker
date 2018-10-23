@@ -45,6 +45,10 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
         L = (UIUtils.getScreenWidth(context) / i) - margin;
     }
 
+    public void refresh() {
+        notifyDataSetChanged();
+    }
+
 
     public void setData(List<Image> images) {
         if (images == null) {

@@ -43,17 +43,7 @@ public class PreviewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         container.addView(views.get(position));
-        View view = views.get(position);
-
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        return view;
+        return views.get(position);
     }
 
     @Override

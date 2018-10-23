@@ -50,7 +50,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .setGridColumn(3)
                         .setTheme(R.style.AppTheme)
                         .setPickedNum(5)
-                        .setResultType(ResultType.URI)
+                        .setResultType(ResultType.PATH)
                         .onPicked(new ImagePickerResultListener() {
                             @Override
                             public void onPicked(List o) {

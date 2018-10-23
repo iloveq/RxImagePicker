@@ -152,6 +152,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     private void result(int resultType) {
         ImageController.get().convertResult(resultType);
+        finish();
     }
 
 }

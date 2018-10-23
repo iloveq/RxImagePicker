@@ -62,11 +62,11 @@ public class Counter {
         return list;
     }
 
-    public void resetCheckedStatus(Image image) {
+    public void resetCheckedStatus(Image image, boolean isChecked) {
         for (Image image1 : list) {
             if (image != null && image1 != null) {
                 if (image.equals(image1)) {
-                    image1.checked = false;
+                    image1.checked = isChecked;
                 }
             }
         }

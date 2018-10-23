@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -53,7 +54,7 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
         PreviewPagerAdapter adapter = new PreviewPagerAdapter(this, list);
         vp.setAdapter(adapter);
         checkView.setChecked(true);
-        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -61,27 +62,35 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
 
             @Override
             public void onPageSelected(int position) {
-                checkView.setChecked(list.get(position).checked);
+                Log.d("111", position + "");
+                currentPos = position;
+                if (list.size()>0)
+                    checkView.setChecked(list.get(position).checked);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        };
+        vp.addOnPageChangeListener(listener);
         checkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean flag = list.get(currentPos).checked;
                 if (flag) {
                     checkView.setChecked(false);
-                    Counter.getInstance().resetCheckedStatus(list.get(currentPos));
+                    Counter.getInstance().resetCheckedStatus(list.get(currentPos), false);
+                    list.get(currentPos).checked = false;
                 } else {
                     checkView.setChecked(true);
+                    Counter.getInstance().resetCheckedStatus(list.get(currentPos), true);
+                    list.get(currentPos).checked = true;
                 }
 
             }
         });
+        listener.onPageSelected(vp.getCurrentItem());
 
     }
 

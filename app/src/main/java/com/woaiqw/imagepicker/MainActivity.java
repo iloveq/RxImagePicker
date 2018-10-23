@@ -53,12 +53,18 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .setResultType(ResultType.PATH)
                         .onPicked(new ImagePickerResultListener() {
                             @Override
-                            public void onPicked(List o) {
-                                Toast.makeText(MainActivity.this,o.size()+"",Toast.LENGTH_SHORT).show();
+                            public void onPicked(Object o) {
+                                List<String> list = (List<String>) o;
+                                Toast.makeText(MainActivity.this,list.size()+""+list.get(0),Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onPhotoTook(Object o) {
+
+                            }
+
+                            @Override
+                            public void onException(String msg) {
 
                             }
                         })

@@ -4,6 +4,7 @@ package com.woaiqw.library.controller;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.content.ContentResolverCompat;
@@ -11,6 +12,7 @@ import android.support.v4.os.CancellationSignal;
 
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.factory.ImagePickerFactory;
+import com.woaiqw.library.listener.ImagePickerResultListener;
 import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
 
@@ -33,7 +35,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ImageController {
 
-    private Disposable d;
+    private Disposable source;
+    private Disposable result;
 
     public interface ImageControllerListener {
         void onSuccess(List<Image> images);
@@ -72,10 +75,13 @@ public class ImageController {
 
     final ForceLoadContentObserver contentObserver;
 
+    ImagePickerResultListener resultListener;
+
     private ImageController() {
         contentObserver = new ForceLoadContentObserver();
         cancelSignal = new CancellationSignal();
         disposable = new CompositeDisposable();
+        resultListener = ImagePickerFactory.getImagePickerResultListener();
     }
 
 
@@ -94,7 +100,7 @@ public class ImageController {
 
     public void getSource(final Context context, final ImageControllerListener listener) {
         final List<Image> list = new ArrayList<>();
-        d = Observable.create(new ObservableOnSubscribe<Cursor>() {
+        source = Observable.create(new ObservableOnSubscribe<Cursor>() {
             @Override
             public void subscribe(ObservableEmitter<Cursor> emitter) {
                 Cursor cursor = ContentResolverCompat.query(context.getContentResolver(),
@@ -152,18 +158,49 @@ public class ImageController {
                 listener.onError(throwable.getMessage());
             }
         });
-        attach(d);
+        attach(source);
     }
 
     public void convertResult(int resultType) {
-
+        List<Image> list = Counter.getInstance().getCheckedList();
+        final List<String> resultOfPath = new ArrayList<>();
+        for (Image image : list) {
+            resultOfPath.add(image.path);
+        }
         switch (resultType) {
             case ResultType.FILE:
+                result = Observable.create(new ObservableOnSubscribe<List<File>>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<List<File>> emitter) throws Exception {
+                        List<File> resultOfFile = new ArrayList<>();
+                        for (String path : resultOfPath) {
+                            File file = new File(path);
+                            resultOfFile.add(file);
+                        }
+                        emitter.onNext(resultOfFile);
+                    }
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<File>>() {
+                    @Override
+                    public void accept(List<File> files) {
+                        resultListener.onPhotoTook(files);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        resultListener.onException(throwable.getMessage());
+                    }
+                });
                 break;
             case ResultType.URI:
+                List<Uri> resultOfUri = new ArrayList<>();
+                for (String path : resultOfPath) {
+                    Uri uri = Uri.parse(path);
+                    resultOfUri.add(uri);
+                }
+                resultListener.onPicked(resultOfUri);
                 break;
             case ResultType.PATH:
-                ImagePickerFactory.getImagePickerResultListener().onPicked(Counter.getInstance().getCheckedList());
+                resultListener.onPicked(resultOfPath);
                 break;
 
         }
@@ -171,8 +208,15 @@ public class ImageController {
     }
 
     public void release() {
-        if (d != null)
-            disposable.remove(d);
+        if (source != null) {
+            disposable.remove(source);
+        }
+        if (result != null) {
+            disposable.remove(result);
+        }
+        if (resultListener != null) {
+            resultListener = null;
+        }
     }
 
 }

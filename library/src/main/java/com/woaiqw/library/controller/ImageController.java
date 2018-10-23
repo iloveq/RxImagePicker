@@ -9,6 +9,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContentResolverCompat;
 import android.support.v4.os.CancellationSignal;
 
+import com.woaiqw.library.annotation.ResultType;
+import com.woaiqw.library.factory.ImagePickerFactory;
+import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
 
 import java.io.File;
@@ -150,6 +153,21 @@ public class ImageController {
             }
         });
         attach(d);
+    }
+
+    public void convertResult(int resultType) {
+
+        switch (resultType) {
+            case ResultType.FILE:
+                break;
+            case ResultType.URI:
+                break;
+            case ResultType.PATH:
+                ImagePickerFactory.getImagePickerResultListener().onPicked(Counter.getInstance().getCheckedList());
+                break;
+
+        }
+
     }
 
     public void release() {

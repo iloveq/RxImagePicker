@@ -18,6 +18,9 @@ import com.woaiqw.library.model.Image;
 
 import java.util.List;
 
+import static com.woaiqw.library.util.Constants.REQUEST_IMAGE_CHOOSE_ACTIVITY_PREVIEW_BUTTON;
+import static com.woaiqw.library.util.Constants.RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON;
+import static com.woaiqw.library.util.Constants.RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON;
 import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 
 /**
@@ -33,7 +36,7 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
     public static void startPreviewChooseActivityForResult(Activity source, int themeId) {
         Intent intent = new Intent(source, PreviewChooseActivity.class);
         intent.putExtra(THEME_RES_ID, themeId);
-        source.startActivity(intent);
+        source.startActivityForResult(intent, REQUEST_IMAGE_CHOOSE_ACTIVITY_PREVIEW_BUTTON);
     }
 
 
@@ -46,9 +49,23 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
         bottom_right = findViewById(R.id.footer_right);
         bottom_left.setTextColor(Color.WHITE);
         bottom_left.setText("返回");
+        bottom_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON, null);
+                finish();
+            }
+        });
         bottom_left.setOnClickListener(this);
         bottom_right.setTextColor(getColorPrimary());
         bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+        bottom_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON, null);
+                finish();
+            }
+        });
         vp = findViewById(R.id.vp);
         vp.setOffscreenPageLimit(3);
         checkView.setBackGroundDefaultColor(getColorPrimary());

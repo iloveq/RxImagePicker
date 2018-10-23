@@ -18,11 +18,16 @@ public class Constants {
     /**
      * request code
      */
-    public static final int REQUEST_CODER = 20;
+    public static final int REQUEST_SOURCE_CREATE_IMAGE_PICKER = 20;
+    // 点击 ImageChooseGridActivity 的 预览按钮
+    public static final int REQUEST_IMAGE_CHOOSE_ACTIVITY_PREVIEW_BUTTON = 21;
 
     /**
      * result code
      */
-    public static final int REAULT_CODER = 30;
+    public static final int RESULT_CODE = 30;
+    public static final int RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON = 31;
+    public static final int RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON = 32;
+
 
 }

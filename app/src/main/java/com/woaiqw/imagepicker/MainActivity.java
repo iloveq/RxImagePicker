@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.woaiqw.base.common.PermissionActivity;
@@ -53,7 +54,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .onPicked(new ImagePickerResultListener() {
                             @Override
                             public void onPicked(List o) {
-
+                                Toast.makeText(MainActivity.this,o.size()+"",Toast.LENGTH_SHORT).show();
                             }
 
                             @Override

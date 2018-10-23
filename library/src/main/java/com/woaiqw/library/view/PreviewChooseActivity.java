@@ -2,6 +2,7 @@ package com.woaiqw.library.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -43,9 +44,11 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
         checkView = findViewById(R.id.cv);
         bottom_left = findViewById(R.id.footer_left);
         bottom_right = findViewById(R.id.footer_right);
+        bottom_left.setTextColor(Color.WHITE);
         bottom_left.setText("返回");
         bottom_left.setOnClickListener(this);
-        bottom_right.setText("使用");
+        bottom_right.setTextColor(getColorPrimary());
+        bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
         vp = findViewById(R.id.vp);
         vp.setOffscreenPageLimit(3);
         checkView.setBackGroundDefaultColor(getColorPrimary());
@@ -64,7 +67,7 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
             public void onPageSelected(int position) {
                 Log.d("111", position + "");
                 currentPos = position;
-                if (list.size()>0)
+                if (list.size() > 0)
                     checkView.setChecked(list.get(position).checked);
             }
 
@@ -89,7 +92,7 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
                     Counter.getInstance().resetCheckedStatus(list.get(currentPos), true);
                     list.get(currentPos).checked = true;
                 }
-
+                bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
             }
         });
         listener.onPageSelected(vp.getCurrentItem());

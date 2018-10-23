@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_gravity="bottom"
-    android:background="@android:color/transparent">
+    android:background="#CC000000">
 
     <TextView
         android:id="@+id/footer_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:textColor="@color/black"
+        android:textSize="14sp"
         tool:text="预览" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="12dp"
-        android:textColor="@color/black"
+        android:textSize="14sp"
         tool:text="使用" />
 
 </RelativeLayout>

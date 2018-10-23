@@ -2,6 +2,7 @@ package com.woaiqw.library.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -54,8 +55,10 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
         rv = body.findViewById(R.id.rv);
         bottom_left = body.findViewById(R.id.footer_left);
         bottom_right = body.findViewById(R.id.footer_right);
+        bottom_left.setTextColor(Color.WHITE);
         bottom_left.setText("预览");
         bottom_left.setOnClickListener(this);
+        bottom_right.setTextColor(getColorPrimary());
         bottom_right.setText("使用");
         column = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, column));
@@ -114,7 +117,8 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     protected void onResume() {
         super.onResume();
-        if (adapter!=null)
+        bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+        if (adapter != null)
             adapter.refresh();
     }
 }

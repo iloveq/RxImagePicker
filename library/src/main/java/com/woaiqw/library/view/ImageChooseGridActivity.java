@@ -31,7 +31,7 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 /**
  * Created by haoran on 2018/10/12.
  */
-public class ImageChooseGridActivity extends ToolbarListActivity implements OnItemClickListener {
+public class ImageChooseGridActivity extends ToolbarListActivity implements OnItemClickListener, View.OnClickListener {
 
 
     private RecyclerView rv;
@@ -40,7 +40,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     private int column;
 
 
-    public static void startImageChooseActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType, int pickedNum) {
+    public static void startImageChooseGridActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType, int pickedNum) {
         Intent intent = new Intent(source.get(), ImageChooseGridActivity.class);
         intent.putExtra(THEME_RES_ID, themeResId);
         intent.putExtra(GRID_COLUMN, gridColumns);
@@ -55,6 +55,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
         bottom_left = body.findViewById(R.id.footer_left);
         bottom_right = body.findViewById(R.id.footer_right);
         bottom_left.setText("预览");
+        bottom_left.setOnClickListener(this);
         bottom_right.setText("使用");
         column = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, column));
@@ -101,5 +102,11 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     public void onClickItemOutOfRange(int range) {
         Toast.makeText(this, "超出了可选范围：" + range, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        // 预览
+        PreviewChooseActivity.startPreviewChooseActivityForResult(this, getColorPrimary());
     }
 }

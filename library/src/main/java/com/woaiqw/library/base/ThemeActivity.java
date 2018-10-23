@@ -12,7 +12,7 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 /**
  * Created by haoran on 2018/10/12.
  */
-class ThemeActivity extends AppCompatActivity {
+public class ThemeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -1,13 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.woaiqw.library">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application>
         <activity
             android:name=".view.ImageChooseGridActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/Default" />
+        <activity
+            android:name=".view.PreviewChooseActivity"
             android:launchMode="singleTop"
             android:theme="@style/Default" />
     </application>

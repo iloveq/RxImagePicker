@@ -17,7 +17,6 @@ import com.woaiqw.library.model.Image;
 import com.woaiqw.library.util.UIUtils;
 import com.woaiqw.library.view.CheckView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ import java.util.List;
 public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHolder> {
 
     private static final int VIEW_TYPE_FIRST = -1;
-    private List<Image> list;
+
     private Context context;
     private ImageLoaderInterface<ImageView> loader;
     private OnItemClickListener listener;
@@ -37,7 +36,6 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     private int checkViewBgColor;
 
     public GridRVAdapter(Context context, ImageLoaderInterface<ImageView> loader, int i, int num, int colorPrimary) {
-        this.list = new ArrayList<>();
         this.context = context;
         this.loader = loader;
         this.pickedNum = num;
@@ -49,11 +47,10 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
 
     public void setData(List<Image> images) {
-        this.list.clear();
         if (images == null) {
             return;
         }
-        this.list.addAll(images);
+        counter.setList(images);
         notifyDataSetChanged();
     }
 
@@ -70,10 +67,12 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
     @Override
     public void onBindViewHolder(final GridViewHolder holder, int position) {
         final int currentPos = holder.getAdapterPosition();
+        final List<Image> list = counter.getList();
         if (position != 0) {
             holder.iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     boolean flag = list.get(currentPos - 1).checked;
                     if (flag) {
                         counter.decrease();
@@ -102,7 +101,7 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
     @Override
     public int getItemCount() {
-        return list.size() + 1;
+        return counter.getList().size() + 1;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -138,5 +137,6 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
         }
     }
+
 
 }

@@ -41,6 +41,7 @@ public class Image implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.checked ? (byte) 1 : (byte) 0);
         dest.writeString(this.name);
         dest.writeString(this.path);
         dest.writeLong(this.size);
@@ -51,6 +52,7 @@ public class Image implements Parcelable {
     }
 
     protected Image(Parcel in) {
+        this.checked = in.readByte() != 0;
         this.name = in.readString();
         this.path = in.readString();
         this.size = in.readLong();

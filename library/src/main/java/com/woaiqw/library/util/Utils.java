@@ -14,8 +14,8 @@ public class Utils {
     public Utils() {
     }
 
-    public static String getFileProviderName(Context context){
-        return context.getPackageName()+".provider";
+    public static String getFileProviderAuthorityName(){
+        return "com.woaiqw.library.provider";
     }
 
     /**

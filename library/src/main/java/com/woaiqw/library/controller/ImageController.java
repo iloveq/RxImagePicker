@@ -218,7 +218,7 @@ public class ImageController {
                      * 7.0 调用系统相机拍照不再允许使用Uri方式，应该替换为FileProvider
                      * 并且这样可以解决MIUI系统上拍照返回size为0的情况
                      */
-                    uri = FileProvider.getUriForFile(activity, Utils.getFileProviderName(activity), file);
+                    uri = FileProvider.getUriForFile(activity, Utils.getFileProviderAuthorityName(), file);
                     //加入uri权限 要不三星手机不能拍照
                     List<ResolveInfo> resInfoList = activity.getPackageManager().queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
                     for (ResolveInfo resolveInfo : resInfoList) {

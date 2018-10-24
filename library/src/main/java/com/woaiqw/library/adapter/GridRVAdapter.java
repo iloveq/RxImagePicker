@@ -76,20 +76,15 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
             holder.iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     boolean flag = list.get(currentPos - 1).checked;
-                    if (flag) {
-                        counter.decrease();
-                    } else {
-                        counter.increase();
-                    }
-                    if (counter.getCount() > pickedNum) {
+                    if (counter.getCheckedList().size() >= pickedNum & !flag) {
                         listener.onClickItemOutOfRange(pickedNum);
-                        return;
+                    } else {
+                        holder.cv.setChecked(!flag);
+                        list.get(currentPos - 1).checked = !flag;
+                        listener.onClickItem(v, currentPos - 1);
                     }
-                    holder.cv.setChecked(!flag);
-                    list.get(currentPos - 1).checked = !flag;
-                    listener.onClickItem(v, currentPos - 1);
+
                 }
             });
             loader.displayImage(context, list.get(position - 1).path, holder.iv);

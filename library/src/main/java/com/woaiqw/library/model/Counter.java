@@ -9,7 +9,6 @@ import java.util.List;
 public class Counter {
 
     private static volatile Counter instance = null;
-    private int count;
     private List<Image> list = new ArrayList<>();
 
     public static Counter getInstance() {
@@ -21,22 +20,6 @@ public class Counter {
             }
         }
         return instance;
-    }
-
-    public void increase() {
-        count++;
-    }
-
-    public void decrease() {
-        count--;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void reset() {
-        this.count = 0;
     }
 
     public List<Image> getCheckedList() {

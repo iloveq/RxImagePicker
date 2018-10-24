@@ -70,7 +70,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
 
                             @Override
                             public void onException(String msg) {
-
+                                Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
                             }
                         })
                         .build();

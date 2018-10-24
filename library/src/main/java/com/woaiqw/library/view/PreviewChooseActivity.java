@@ -58,7 +58,7 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
         });
         bottom_left.setOnClickListener(this);
         bottom_right.setTextColor(getColorPrimary());
-        bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+        bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
         bottom_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,16 +100,14 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
                 boolean flag = list.get(currentPos).checked;
                 if (flag) {
                     checkView.setChecked(false);
-                    Counter.getInstance().decrease();
                     Counter.getInstance().resetCheckedStatus(list.get(currentPos), false);
                     list.get(currentPos).checked = false;
                 } else {
-                    Counter.getInstance().increase();
                     checkView.setChecked(true);
                     Counter.getInstance().resetCheckedStatus(list.get(currentPos), true);
                     list.get(currentPos).checked = true;
                 }
-                bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+                bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
             }
         });
         listener.onPageSelected(vp.getCurrentItem());

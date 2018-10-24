@@ -96,13 +96,13 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     protected void onDestroy() {
         super.onDestroy();
         ImageController.get().release();
-        Counter.getInstance().reset();
+        Counter.getInstance().clear();
     }
 
 
     @Override
     public void onClickItem(View view, int position) {
-        bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+        bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     protected void onResume() {
         super.onResume();
-        bottom_right.setText("使用(" + Counter.getInstance().getCount() + ")");
+        bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
         if (adapter != null)
             adapter.refresh();
 

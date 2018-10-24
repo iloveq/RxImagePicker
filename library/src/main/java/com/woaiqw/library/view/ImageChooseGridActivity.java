@@ -102,7 +102,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     public void onClickTakePhoto(View v) {
         Toast.makeText(this, "take photo", Toast.LENGTH_SHORT).show();
-        ImageController.get().takePhoto(new WeakReference<Activity>(this),50);
+        ImageController.get().takePhoto(new WeakReference<Activity>(this), 50);
     }
 
     @Override
@@ -113,15 +113,21 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        boolean tag = Counter.getInstance().getList().size() > 0 && Counter.getInstance().getCheckedList().size() > 0;
         if (id == R.id.footer_left) {
             // 预览
-            if (Counter.getInstance().getList().size() > 0 && Counter.getInstance().getCheckedList().size() > 0) {
+            if (tag) {
                 PreviewChooseActivity.startPreviewChooseActivityForResult(this, getThemeResId());
             } else {
                 Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.footer_right) {
-            result(resultType);
+            // 使用
+            if (tag) {
+                convertResultAndReturn(resultType);
+            } else {
+                Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -139,22 +145,30 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 50) {
+            ImageController.get().convertTakePhotoResult(resultType);
+        } else {
+            Toast.makeText(this, "拍照取消", Toast.LENGTH_SHORT).show();
+        }
         switch (resultCode) {
             case RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON:
-                result(resultType);
-                finish();
+                boolean tag = Counter.getInstance().getList().size() > 0 && Counter.getInstance().getCheckedList().size() > 0;
+                if (tag) {
+                    convertResultAndReturn(resultType);
+                    finish();
+                } else {
+                    Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
+                }
                 break;
-
             case RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON:
                 break;
-
 
         }
     }
 
 
-    private void result(int resultType) {
-        ImageController.get().convertResult(resultType);
+    private void convertResultAndReturn(int resultType) {
+        ImageController.get().convertPickedPhotoResult(resultType);
         finish();
     }
 

@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContentResolverCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.os.CancellationSignal;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.woaiqw.library.annotation.ResultType;
@@ -51,6 +52,8 @@ public class ImageController {
     private Disposable result;
     private File takePhotoTempFile;
     private Uri takePhotoUri;
+    private String takePhotoPath;
+
 
     public interface ImageControllerListener {
         void onSuccess(List<Image> images);
@@ -175,6 +178,10 @@ public class ImageController {
         attach(travel);
     }
 
+    public interface PhotoPathListener {
+        void getPhotoPath(String path);
+    }
+
     public void takePhoto(WeakReference<Activity> source, final int requestCode) {
         final Activity activity = source.get();
         final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -188,7 +195,12 @@ public class ImageController {
                     } else {
                         takePhotoTempFile = Environment.getDataDirectory();
                     }
-                    takePhotoTempFile = PhotoUtils.createFile(takePhotoTempFile, "IMG_", ".jpg");
+                    takePhotoTempFile = PhotoUtils.createFile(takePhotoTempFile, "IMG_", ".jpg", new PhotoPathListener() {
+                        @Override
+                        public void getPhotoPath(String path) {
+                            takePhotoPath = path;
+                        }
+                    });
                     emitter.onNext(takePhotoTempFile);
                 }
             }
@@ -214,13 +226,13 @@ public class ImageController {
                         activity.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     }
                 }
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                activity.startActivityForResult(takePictureIntent, requestCode);
                 return uri;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Uri>() {
             @Override
             public void accept(Uri uri) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                activity.startActivityForResult(takePictureIntent, requestCode);
                 takePhotoUri = uri;
             }
         }, new Consumer<Throwable>() {
@@ -232,8 +244,23 @@ public class ImageController {
         attach(takePhoto);
     }
 
+    public void convertTakePhotoResult(int resultType) {
+        switch (resultType) {
+            case ResultType.FILE:
+                resultListener.onPhotoTook(getTakePhotoTempFile());
+                break;
+            case ResultType.URI:
+                resultListener.onPhotoTook(getTakePhotoUri());
+                break;
+            case ResultType.PATH:
+                resultListener.onPhotoTook(getTakePhotoPath());
+                break;
 
-    public void convertResult(int resultType) {
+        }
+    }
+
+
+    public void convertPickedPhotoResult(int resultType) {
         List<Image> list = Counter.getInstance().getCheckedList();
         final List<String> resultOfPath = new ArrayList<>();
         for (Image image : list) {
@@ -294,6 +321,17 @@ public class ImageController {
         return takePhotoUri;
     }
 
+    public String getTakePhotoPath() {
+        if (TextUtils.isEmpty(takePhotoPath)) {
+            throw new IllegalStateException(" path generate failure ");
+        }
+        return takePhotoPath;
+    }
+
+    public ImagePickerResultListener getResultListener() {
+        return resultListener;
+    }
+
     public void release() {
         if (travel != null) {
             disposable.remove(travel);
@@ -304,9 +342,13 @@ public class ImageController {
         if (result != null) {
             disposable.remove(result);
         }
-        if (resultListener != null) {
-            resultListener = null;
-        }
+
+        resultListener = null;
+        takePhotoPath = null;
+        takePhotoTempFile = null;
+        takePhotoUri = null;
+
+
     }
 
 }

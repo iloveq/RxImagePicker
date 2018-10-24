@@ -1,13 +1,20 @@
 package com.woaiqw.library.controller;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.content.ContentResolverCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.os.CancellationSignal;
 
 import com.woaiqw.library.annotation.ResultType;
@@ -15,8 +22,11 @@ import com.woaiqw.library.factory.ImagePickerFactory;
 import com.woaiqw.library.listener.ImagePickerResultListener;
 import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
+import com.woaiqw.library.util.PhotoUtils;
+import com.woaiqw.library.util.Utils;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +45,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ImageController {
 
-    private Disposable source;
+    private Disposable travel;
+    private Disposable takePhoto;
     private Disposable result;
 
     public interface ImageControllerListener {
@@ -100,7 +111,7 @@ public class ImageController {
 
     public void getSource(final Context context, final ImageControllerListener listener) {
         final List<Image> list = new ArrayList<>();
-        source = Observable.create(new ObservableOnSubscribe<Cursor>() {
+        travel = Observable.create(new ObservableOnSubscribe<Cursor>() {
             @Override
             public void subscribe(ObservableEmitter<Cursor> emitter) {
                 Cursor cursor = ContentResolverCompat.query(context.getContentResolver(),
@@ -158,8 +169,54 @@ public class ImageController {
                 listener.onError(throwable.getMessage());
             }
         });
-        attach(source);
+        attach(travel);
     }
+
+    public void takePhoto(WeakReference<Activity> source,final int requestCode) {
+        final Activity activity = source.get();
+        final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        takePhoto = Observable.create(new ObservableOnSubscribe<File>() {
+            @Override
+            public void subscribe(ObservableEmitter<File> emitter) {
+                File takeImageFile;
+                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+                    if (Utils.existSDCard()) {
+                        takeImageFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
+                    } else {
+                        takeImageFile = Environment.getDataDirectory();
+                    }
+                    takeImageFile = PhotoUtils.createFile(takeImageFile, "IMG_", ".jpg");
+                    emitter.onNext(takeImageFile);
+                }
+            }
+        }).map(new Function<File, Uri>() {
+            @Override
+            public Uri apply(File file) {
+                Uri uri;
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+                    uri = Uri.fromFile(file);
+                } else {
+                    /**
+                     * 7.0 调用系统相机拍照不再允许使用Uri方式，应该替换为FileProvider
+                     * 并且这样可以解决MIUI系统上拍照返回size为0的情况
+                     */
+                    uri = FileProvider.getUriForFile(activity, Utils.getFileProviderName(activity), file);
+                    //加入uri权限 要不三星手机不能拍照
+                    List<ResolveInfo> resInfoList = activity.getPackageManager().queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                    for (ResolveInfo resolveInfo : resInfoList) {
+                        String packageName = resolveInfo.activityInfo.packageName;
+                        activity.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
+                }
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                activity.startActivityForResult(takePictureIntent, requestCode);
+                return uri;
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        attach(takePhoto);
+    }
+
 
     public void convertResult(int resultType) {
         List<Image> list = Counter.getInstance().getCheckedList();
@@ -209,8 +266,11 @@ public class ImageController {
     }
 
     public void release() {
-        if (source != null) {
-            disposable.remove(source);
+        if (travel != null) {
+            disposable.remove(travel);
+        }
+        if (takePhoto != null) {
+            disposable.remove(takePhoto);
         }
         if (result != null) {
             disposable.remove(result);

@@ -14,7 +14,7 @@ import com.woaiqw.library.R;
 import com.woaiqw.library.listener.OnItemClickListener;
 import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
-import com.woaiqw.library.util.UIUtils;
+import com.woaiqw.library.util.Utils;
 import com.woaiqw.library.view.CheckView;
 
 import java.util.List;
@@ -41,8 +41,8 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
         this.pickedNum = num;
         this.checkViewBgColor = colorPrimary;
         counter = Counter.getInstance();
-        margin = UIUtils.dp2px(context, 3);
-        L = (UIUtils.getScreenWidth(context) / i) - margin;
+        margin = Utils.dp2px(context, 3);
+        L = (Utils.getScreenWidth(context) / i) - margin;
     }
 
     public void refresh() {

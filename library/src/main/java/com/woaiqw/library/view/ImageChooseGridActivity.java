@@ -104,6 +104,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     public void onClickTakePhoto(View v) {
         Toast.makeText(this, "take photo", Toast.LENGTH_SHORT).show();
+        ImageController.get().takePhoto(new WeakReference<Activity>(this),50);
     }
 
     @Override
@@ -116,7 +117,11 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
         int id = v.getId();
         if (id == R.id.footer_left) {
             // 预览
-            PreviewChooseActivity.startPreviewChooseActivityForResult(this, getThemeResId());
+            if (Counter.getInstance().getList().size() > 0 && Counter.getInstance().getCheckedList().size() > 0) {
+                PreviewChooseActivity.startPreviewChooseActivityForResult(this, getThemeResId());
+            } else {
+                Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.footer_right) {
             result(resultType);
         }

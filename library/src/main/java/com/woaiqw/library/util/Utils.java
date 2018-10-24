@@ -2,6 +2,7 @@ package com.woaiqw.library.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
@@ -9,15 +10,25 @@ import android.view.WindowManager;
 /**
  * Created by haoran on 2018/10/18.
  */
-public class UIUtils {
-    public UIUtils() {
+public class Utils {
+    public Utils() {
+    }
+
+    public static String getFileProviderName(Context context){
+        return context.getPackageName()+".provider";
+    }
+
+    /**
+     * 判断SDCard是否可用
+     */
+    public static boolean existSDCard() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
 
     private static Resources getResources(Context context) {
         return context.getResources();
     }
-
 
     public static int dp2px(Context context, float dp) {
         return (int) (getResources(context).getDisplayMetrics().density * dp + 0.5F);

@@ -18,9 +18,12 @@ public class Constants {
     /**
      * request code
      */
+    // 从你的 Activity 跳到 ImageChooseGridActivity
     public static final int REQUEST_SOURCE_CREATE_IMAGE_PICKER = 20;
     // 点击 ImageChooseGridActivity 的 预览按钮
     public static final int REQUEST_IMAGE_CHOOSE_ACTIVITY_PREVIEW_BUTTON = 21;
+    // 点击 ImageChooseGridActivity 的 拍照按钮
+    public static final int REQUEST_IMAGE_CHOOSE_ACTIVITY_TAKE_PHOTO_BUTTON = 22;
 
     /**
      * result code

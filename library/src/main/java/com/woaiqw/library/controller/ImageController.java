@@ -42,6 +42,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.woaiqw.library.util.Constants.REQUEST_IMAGE_CHOOSE_ACTIVITY_TAKE_PHOTO_BUTTON;
+
 /**
  * Created by haoran on 2018/10/17.
  */
@@ -92,7 +94,7 @@ public class ImageController {
 
     final ForceLoadContentObserver contentObserver;
 
-    ImagePickerResultListener resultListener;
+    final ImagePickerResultListener resultListener;
 
     private ImageController() {
         contentObserver = new ForceLoadContentObserver();
@@ -182,7 +184,7 @@ public class ImageController {
         void getPhotoPath(String path);
     }
 
-    public void takePhoto(WeakReference<Activity> source, final int requestCode) {
+    public void takePhoto(WeakReference<Activity> source) {
         final Activity activity = source.get();
         final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -226,13 +228,14 @@ public class ImageController {
                         activity.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     }
                 }
+
                 return uri;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Uri>() {
             @Override
             public void accept(Uri uri) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                activity.startActivityForResult(takePictureIntent, requestCode);
+                activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CHOOSE_ACTIVITY_TAKE_PHOTO_BUTTON);
                 takePhotoUri = uri;
             }
         }, new Consumer<Throwable>() {
@@ -323,7 +326,7 @@ public class ImageController {
 
     public String getTakePhotoPath() {
         if (TextUtils.isEmpty(takePhotoPath)) {
-            throw new IllegalStateException(" path generate failure ");
+            takePhotoPath = "";
         }
         return takePhotoPath;
     }
@@ -343,7 +346,6 @@ public class ImageController {
             disposable.remove(result);
         }
 
-        resultListener = null;
         takePhotoPath = null;
         takePhotoTempFile = null;
         takePhotoUri = null;

@@ -19,11 +19,13 @@ import com.woaiqw.library.factory.ImagePickerFactory;
 import com.woaiqw.library.listener.OnItemClickListener;
 import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
+import com.woaiqw.library.util.PhotoUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import static com.woaiqw.library.util.Constants.GRID_COLUMN;
+import static com.woaiqw.library.util.Constants.REQUEST_IMAGE_CHOOSE_ACTIVITY_TAKE_PHOTO_BUTTON;
 import static com.woaiqw.library.util.Constants.REQUEST_SOURCE_CREATE_IMAGE_PICKER;
 import static com.woaiqw.library.util.Constants.RESULT_NUM;
 import static com.woaiqw.library.util.Constants.RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON;
@@ -68,6 +70,10 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
         rv.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         resultType = getIntent().getIntExtra(RESULT_TYPE, 2);
+        getAlbumImages();
+    }
+
+    private void getAlbumImages() {
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
             @Override
             public void onSuccess(List<Image> images) {
@@ -101,8 +107,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     @Override
     public void onClickTakePhoto(View v) {
-        Toast.makeText(this, "take photo", Toast.LENGTH_SHORT).show();
-        ImageController.get().takePhoto(new WeakReference<Activity>(this), 50);
+        ImageController.get().takePhoto(new WeakReference<Activity>(this));
     }
 
     @Override
@@ -145,10 +150,14 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 50) {
-            ImageController.get().convertTakePhotoResult(resultType);
-        } else {
-            Toast.makeText(this, "拍照取消", Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_IMAGE_CHOOSE_ACTIVITY_TAKE_PHOTO_BUTTON) {
+            try {
+                PhotoUtils.galleryAddPic(this, ImageController.get().getTakePhotoTempFile());
+                ImageController.get().convertTakePhotoResult(resultType);
+            } catch (Exception e) {
+                Toast.makeText(this, "取消拍照", Toast.LENGTH_SHORT).show();
+            }
+            finish();
         }
         switch (resultCode) {
             case RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON:

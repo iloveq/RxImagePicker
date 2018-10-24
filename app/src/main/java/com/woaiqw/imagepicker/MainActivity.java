@@ -23,12 +23,13 @@ import java.util.List;
 public class MainActivity extends PermissionActivity implements View.OnClickListener {
 
     private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private ImageView iv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        iv = findViewById(R.id.iv_main);
         findViewById(R.id.tv).setOnClickListener(this);
 
 
@@ -56,12 +57,15 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                             @Override
                             public void onPicked(Object o) {
                                 List<String> list = (List<String>) o;
-                                Toast.makeText(MainActivity.this,list.size()+""+list.get(0),Toast.LENGTH_SHORT).show();
+                                String path = list.get(0);
+                                GlideApp.with(MainActivity.this).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(iv);
                             }
 
                             @Override
                             public void onPhotoTook(Object o) {
-                                Log.d("111",o.toString());
+                                Log.d("111", o.toString());
+                                String path = (String) o;
+                                GlideApp.with(MainActivity.this).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(iv);
                             }
 
                             @Override

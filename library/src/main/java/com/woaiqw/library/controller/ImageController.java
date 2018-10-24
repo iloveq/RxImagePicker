@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContentResolverCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.os.CancellationSignal;
+import android.widget.Toast;
 
 import com.woaiqw.library.annotation.ResultType;
 import com.woaiqw.library.factory.ImagePickerFactory;
@@ -48,6 +49,8 @@ public class ImageController {
     private Disposable travel;
     private Disposable takePhoto;
     private Disposable result;
+    private File takePhotoTempFile;
+    private Uri takePhotoUri;
 
     public interface ImageControllerListener {
         void onSuccess(List<Image> images);
@@ -172,27 +175,29 @@ public class ImageController {
         attach(travel);
     }
 
-    public void takePhoto(WeakReference<Activity> source,final int requestCode) {
+    public void takePhoto(WeakReference<Activity> source, final int requestCode) {
         final Activity activity = source.get();
         final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         takePhoto = Observable.create(new ObservableOnSubscribe<File>() {
             @Override
             public void subscribe(ObservableEmitter<File> emitter) {
-                File takeImageFile;
                 if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
                     if (Utils.existSDCard()) {
-                        takeImageFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
+                        takePhotoTempFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
                     } else {
-                        takeImageFile = Environment.getDataDirectory();
+                        takePhotoTempFile = Environment.getDataDirectory();
                     }
-                    takeImageFile = PhotoUtils.createFile(takeImageFile, "IMG_", ".jpg");
-                    emitter.onNext(takeImageFile);
+                    takePhotoTempFile = PhotoUtils.createFile(takePhotoTempFile, "IMG_", ".jpg");
+                    emitter.onNext(takePhotoTempFile);
                 }
             }
         }).map(new Function<File, Uri>() {
             @Override
             public Uri apply(File file) {
+                if (file == null) {
+                    throw new IllegalStateException(" temp file generate failure ");
+                }
                 Uri uri;
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                     uri = Uri.fromFile(file);
@@ -213,7 +218,17 @@ public class ImageController {
                 activity.startActivityForResult(takePictureIntent, requestCode);
                 return uri;
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Uri>() {
+            @Override
+            public void accept(Uri uri) {
+                takePhotoUri = uri;
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                Toast.makeText(activity, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
         attach(takePhoto);
     }
 
@@ -263,6 +278,20 @@ public class ImageController {
 
         }
 
+    }
+
+    public File getTakePhotoTempFile() {
+        if (takePhotoTempFile == null) {
+            throw new IllegalStateException(" temp file generate failure ");
+        }
+        return takePhotoTempFile;
+    }
+
+    public Uri getTakePhotoUri() {
+        if (takePhotoUri == null) {
+            throw new IllegalStateException(" uri generate failure ");
+        }
+        return takePhotoUri;
     }
 
     public void release() {

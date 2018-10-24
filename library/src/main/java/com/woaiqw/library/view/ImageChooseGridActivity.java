@@ -37,10 +37,8 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
 public class ImageChooseGridActivity extends ToolbarListActivity implements OnItemClickListener, View.OnClickListener {
 
 
-    private RecyclerView rv;
     private GridRVAdapter adapter;
     private TextView bottom_left, bottom_right;
-    private int column;
     private int resultType;
 
 
@@ -55,7 +53,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     @Override
     public void onBodyCreated(View body, @Nullable Bundle savedInstanceState) {
-        rv = body.findViewById(R.id.rv);
+        RecyclerView rv = body.findViewById(R.id.rv);
         bottom_left = body.findViewById(R.id.footer_left);
         bottom_right = body.findViewById(R.id.footer_right);
         bottom_left.setTextColor(Color.WHITE);
@@ -64,7 +62,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
         bottom_right.setOnClickListener(this);
         bottom_right.setTextColor(getColorPrimary());
         bottom_right.setText("使用");
-        column = getIntent().getIntExtra(GRID_COLUMN, 3);
+        int column = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, column));
         adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), column, getIntent().getIntExtra(RESULT_NUM, 1), getColorPrimary());
         rv.setAdapter(adapter);

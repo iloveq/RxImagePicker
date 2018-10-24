@@ -1,6 +1,8 @@
-# RxImagePicker
-[RxImagePicker](https://github.com/woaigmz/RxImagePicker) 图片选择器
+
+RxImagePicker
+
 ![takePhoto.gif](https://upload-images.jianshu.io/upload_images/8886407-d5ba5d648394eb06.gif?imageMogr2/auto-orient/strip)
+
 ![pickImage.gif](https://upload-images.jianshu.io/upload_images/8886407-8051a2779827a117.gif?imageMogr2/auto-orient/strip)
 
 ### 优点：

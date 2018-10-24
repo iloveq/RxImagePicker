@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -60,7 +61,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
 
                             @Override
                             public void onPhotoTook(Object o) {
-
+                                Log.d("111",o.toString());
                             }
 
                             @Override

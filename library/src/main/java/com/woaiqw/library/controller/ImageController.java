@@ -191,7 +191,7 @@ public class ImageController {
             public void subscribe(ObservableEmitter<File> emitter) {
                 if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
                     if (Utils.existSDCard()) {
-                        takePhotoTempFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
+                        takePhotoTempFile = new File(Environment.getExternalStorageDirectory(), "/Pictures");
                     } else {
                         takePhotoTempFile = Environment.getDataDirectory();
                     }

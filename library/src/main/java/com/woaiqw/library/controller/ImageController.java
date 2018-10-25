@@ -273,7 +273,7 @@ public class ImageController {
             case ResultType.FILE:
                 result = Observable.create(new ObservableOnSubscribe<List<File>>() {
                     @Override
-                    public void subscribe(ObservableEmitter<List<File>> emitter) throws Exception {
+                    public void subscribe(ObservableEmitter<List<File>> emitter) {
                         List<File> resultOfFile = new ArrayList<>();
                         for (String path : resultOfPath) {
                             File file = new File(path);
@@ -284,7 +284,7 @@ public class ImageController {
                 }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<File>>() {
                     @Override
                     public void accept(List<File> files) {
-                        resultListener.onPhotoTook(files);
+                        resultListener.onPicked(files);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

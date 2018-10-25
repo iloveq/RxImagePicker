@@ -44,7 +44,7 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                         .source(MainActivity.this, new ImageLoaderInterface<ImageView>() {
                             @Override
                             public void displayImage(Context context, String path, ImageView imageView, int width, int height, float scale) {
-                                ImageLoader.loadImageWithSize(context, imageView, path, width, height, scale);
+                                ImageLoader.loadImageWithSize(context, imageView, path, width, height, 1);
                             }
                         })
                         .createFactory()

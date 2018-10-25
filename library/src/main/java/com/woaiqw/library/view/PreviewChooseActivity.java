@@ -2,17 +2,18 @@ package com.woaiqw.library.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.woaiqw.library.R;
 import com.woaiqw.library.adapter.PreviewPagerAdapter;
 import com.woaiqw.library.base.ThemeActivity;
+import com.woaiqw.library.listener.WrapOnPageChangeListener;
 import com.woaiqw.library.model.Counter;
 import com.woaiqw.library.model.Image;
 
@@ -28,10 +29,12 @@ import static com.woaiqw.library.util.Constants.THEME_RES_ID;
  */
 public class PreviewChooseActivity extends ThemeActivity implements View.OnClickListener {
 
-    private ViewPager vp;
     private TextView bottom_left, bottom_right;
     private CheckView checkView;
     private int currentPos;
+    private List<Image> list;
+    private ViewPager.OnPageChangeListener listener;
+    private ViewPager vp;
 
     public static void startPreviewChooseActivityForResult(Activity source, int themeId) {
         Intent intent = new Intent(source, PreviewChooseActivity.class);
@@ -44,56 +47,62 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview_choose);
-        checkView = findViewById(R.id.cv);
+        setBottomBar();
+        initData();
+        setCheckView();
+        initVpAndSetData();
+        initListener();
+
+    }
+
+    private void setBottomBar() {
+
         bottom_left = findViewById(R.id.footer_left);
         bottom_right = findViewById(R.id.footer_right);
-        bottom_left.setTextColor(Color.WHITE);
+
+        int[][] states = new int[][]{
+                new int[]{-android.R.attr.state_pressed}, // unpressed
+                new int[]{android.R.attr.state_pressed}  // pressed
+        };
+        int[] colorsLeft = new int[]{
+                Color.WHITE,
+                getColorPrimary()
+        };
+        int[] colorsRight = new int[]{
+                getColorPrimary(),
+                Color.WHITE
+        };
+        ColorStateList colorStateListLeft = new ColorStateList(states, colorsLeft);
+        ColorStateList colorStateListRight = new ColorStateList(states, colorsRight);
+
+        bottom_left.setTextColor(colorStateListLeft);
+        bottom_right.setTextColor(colorStateListRight);
+
         bottom_left.setText("返回");
-        bottom_left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON, null);
-                finish();
-            }
-        });
-        bottom_left.setOnClickListener(this);
-        bottom_right.setTextColor(getColorPrimary());
         bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
-        bottom_right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON, null);
-                finish();
-            }
-        });
-        vp = findViewById(R.id.vp);
-        vp.setOffscreenPageLimit(3);
+
+    }
+
+    private void initData() {
+        list = Counter.getInstance().getCheckedList();
+    }
+
+    private void setCheckView() {
+        checkView = findViewById(R.id.cv);
         checkView.setBackGroundDefaultColor(getColorPrimary());
         checkView.setEnabled(true);
-        final List<Image> list = Counter.getInstance().getCheckedList();
-        PreviewPagerAdapter adapter = new PreviewPagerAdapter(this, list);
-        vp.setAdapter(adapter);
         checkView.setChecked(true);
-        ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
-            }
+    private void initVpAndSetData() {
+        vp = findViewById(R.id.vp);
+        vp.setOffscreenPageLimit(3);
+        vp.setAdapter(new PreviewPagerAdapter(this, list));
+    }
 
-            @Override
-            public void onPageSelected(int position) {
-                Log.d("111", position + "");
-                currentPos = position;
-                if (list.size() > 0)
-                    checkView.setChecked(list.get(position).checked);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        };
-        vp.addOnPageChangeListener(listener);
+    private void initListener() {
+        bottom_left.setOnClickListener(this);
+        bottom_right.setOnClickListener(this);
         checkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,12 +119,36 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
                 bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
             }
         });
-        listener.onPageSelected(vp.getCurrentItem());
+        listener = new WrapOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                currentPos = position;
+                if (list.size() > 0)
+                    checkView.setChecked(list.get(position).checked);
+            }
+        };
 
+        vp.addOnPageChangeListener(listener);
+        listener.onPageSelected(vp.getCurrentItem());
     }
+
 
     @Override
     public void onClick(View v) {
-        finish();
+
+        int id = v.getId();
+
+        if (id == R.id.footer_left) {
+            // 返回
+            setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON, null);
+            finish();
+
+        } else if (id == R.id.footer_right) {
+            // 使用
+            setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON, null);
+            finish();
+
+        }
     }
 }

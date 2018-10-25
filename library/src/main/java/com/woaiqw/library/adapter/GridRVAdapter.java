@@ -87,7 +87,7 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
                 }
             });
-            loader.displayImage(context, list.get(position - 1).path, holder.iv);
+            loader.displayImage(context, list.get(position - 1).path, holder.iv, 300, 300, 0.85f);
             holder.cv.setChecked(list.get(currentPos - 1).checked);
         } else {
             holder.tv.setOnClickListener(new View.OnClickListener() {

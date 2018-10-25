@@ -2,6 +2,7 @@ package com.woaiqw.library.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -55,22 +56,59 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     @Override
     public void onBodyCreated(View body, @Nullable Bundle savedInstanceState) {
-        RecyclerView rv = body.findViewById(R.id.rv);
+        setBottomBar(body);
+        initRecyclerList(body);
+        initListener();
+        getResultTypeFromIntent();
+        getAlbumImages();
+    }
+
+
+    private void setBottomBar(View body) {
+
         bottom_left = body.findViewById(R.id.footer_left);
         bottom_right = body.findViewById(R.id.footer_right);
-        bottom_left.setTextColor(Color.WHITE);
+
+        int[][] states = new int[][]{
+                new int[]{-android.R.attr.state_pressed}, // unpressed
+                new int[]{android.R.attr.state_pressed}  // pressed
+        };
+        int[] colorsLeft = new int[]{
+                Color.WHITE,
+                getColorPrimary()
+        };
+        int[] colorsRight = new int[]{
+                getColorPrimary(),
+                Color.WHITE
+        };
+        ColorStateList colorStateListLeft = new ColorStateList(states, colorsLeft);
+        ColorStateList colorStateListRight = new ColorStateList(states, colorsRight);
+
+        bottom_left.setTextColor(colorStateListLeft);
+        bottom_right.setTextColor(colorStateListRight);
+
         bottom_left.setText("预览");
-        bottom_left.setOnClickListener(this);
-        bottom_right.setOnClickListener(this);
-        bottom_right.setTextColor(getColorPrimary());
         bottom_right.setText("使用");
+
+    }
+
+
+    private void initRecyclerList(View body) {
+        RecyclerView rv = body.findViewById(R.id.rv);
         int column = getIntent().getIntExtra(GRID_COLUMN, 3);
         rv.setLayoutManager(new GridLayoutManager(this, column));
         adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), column, getIntent().getIntExtra(RESULT_NUM, 1), getColorPrimary());
         rv.setAdapter(adapter);
+    }
+
+    private void initListener() {
+        bottom_left.setOnClickListener(this);
+        bottom_right.setOnClickListener(this);
         adapter.setOnItemClickListener(this);
+    }
+
+    private void getResultTypeFromIntent() {
         resultType = getIntent().getIntExtra(RESULT_TYPE, 2);
-        getAlbumImages();
     }
 
     private void getAlbumImages() {
@@ -117,8 +155,10 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     @Override
     public void onClick(View v) {
+
         int id = v.getId();
         boolean tag = Counter.getInstance().getList().size() > 0 && Counter.getInstance().getCheckedList().size() > 0;
+
         if (id == R.id.footer_left) {
             // 预览
             if (tag) {

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
-    android:clickable="true"
-    android:focusable="true"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="?attr/actionBarSize"
     android:layout_gravity="bottom"
-    android:background="#CC000000">
+    android:background="#c8000000"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/footer_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginLeft="13dp"
+        android:textSize="16sp"
         tool:text="预览" />
 
     <TextView
@@ -22,8 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="12dp"
-        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:textSize="16sp"
         tool:text="使用" />
 
 </RelativeLayout>

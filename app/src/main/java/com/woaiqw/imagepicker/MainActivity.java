@@ -9,9 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.woaiqw.base.common.PermissionActivity;
-import com.woaiqw.base.utils.GlideApp;
+import com.woaiqw.base.utils.ImageLoader;
 import com.woaiqw.base.utils.PermissionListener;
 import com.woaiqw.library.ImageLoaderInterface;
 import com.woaiqw.library.RxImagePicker;
@@ -44,12 +43,12 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                 RxImagePicker
                         .source(MainActivity.this, new ImageLoaderInterface<ImageView>() {
                             @Override
-                            public void displayImage(Context context, String path, ImageView imageView) {
-                                GlideApp.with(context).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
+                            public void displayImage(Context context, String path, ImageView imageView, int width, int height, float scale) {
+                                ImageLoader.loadImageWithSize(context, imageView, path, width, height, scale);
                             }
                         })
                         .createFactory()
-                        .setGridColumn(5)
+                        .setGridColumn(3)
                         .setTheme(R.style.AppTheme)
                         .setPickedNum(9)
                         .setResultType(ResultType.PATH)
@@ -58,19 +57,19 @@ public class MainActivity extends PermissionActivity implements View.OnClickList
                             public void onPicked(Object o) {
                                 List<String> list = (List<String>) o;
                                 String path = list.get(0);
-                                GlideApp.with(MainActivity.this).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(iv);
+                                ImageLoader.loadImageWithPath(MainActivity.this, iv, path);
                             }
 
                             @Override
                             public void onPhotoTook(Object o) {
                                 Log.d("111", o.toString());
                                 String path = (String) o;
-                                GlideApp.with(MainActivity.this).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(iv);
+                                ImageLoader.loadImageWithPath(MainActivity.this, iv, path);
                             }
 
                             @Override
                             public void onException(String msg) {
-                                Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
                         })
                         .build();

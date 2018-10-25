@@ -24,7 +24,7 @@ public class PreviewPagerAdapter extends PagerAdapter {
         for (Image image : images) {
             ImageView iv = new ImageView(context);
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImagePickerFactory.getImageLoader().displayImage(context, image.path, iv);
+            ImagePickerFactory.getImageLoader().displayImage(context, image.path, iv, 300, 300, 0.85f);
             views.add(iv);
         }
 

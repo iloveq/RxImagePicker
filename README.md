@@ -23,7 +23,7 @@ RxImagePicker
 	}
     //Add the dependency
     dependencies {
-	        implementation 'com.github.woaigmz:RxImagePicker:0.0.2'
+	        implementation 'com.github.woaigmz:RxImagePicker:0.0.3'
 	}
 ```
 ② 使用：不提供权限检测 //根据设置的ResultType 在回调里手动转换类型

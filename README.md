@@ -73,13 +73,20 @@ requestPermissions(permissions, new PermissionListener() {
         });
 ```
 ### 设计：
+
 ![project.png](https://upload-images.jianshu.io/upload_images/8886407-2c8eceabde959d91.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ① UI ：图片选择网格页面和预览选择页面 ImageChooseGridActivity/PreviewChooseActivity 通过 -- ImageChooseUI这个类拿到配置信息
-② Factory：ImagePickerFactory 通过建造者模式 初始化配置
-③ ImageLoaderInterface ：对外提供图片引擎适配接口 适配器模式
-④ controller：ImageController Rxjava 数据处理地方，提供方法，供外界调用
-⑤ model：Counter 单例模式，存储所有 Image 计算选择的ImageList 类似于数据库
-⑥ RxImagePicker 入口
+
+② Factory：[ImagePickerFactory](https://github.com/woaigmz/RxImagePicker/blob/master/library/src/main/java/com/woaiqw/library/factory/ImagePickerFactory.java) 通过建造者模式 初始化配置
+
+③ [ImageLoaderInterface](https://github.com/woaigmz/RxImagePicker/blob/master/library/src/main/java/com/woaiqw/library/ImageLoaderInterface.java) ：对外提供图片引擎适配接口 适配器模式
+
+④ controller：[ImageController](https://github.com/woaigmz/RxImagePicker/blob/master/library/src/main/java/com/woaiqw/library/controller/ImageController.java) Rxjava 数据处理地方，提供方法，供外界调用
+
+⑤ model：[Counter](https://github.com/woaigmz/RxImagePicker/blob/master/library/src/main/java/com/woaiqw/library/model/Counter.java) 单例模式，存储所有 Image 计算选择的ImageList 类似于数据库
+
+⑥ [RxImagePicker](https://github.com/woaigmz/RxImagePicker/blob/master/library/src/main/java/com/woaiqw/library/RxImagePicker.java) 入口
+
 
 ##### 谢谢：）for the dream

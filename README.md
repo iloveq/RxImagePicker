@@ -23,7 +23,7 @@ RxImagePicker
 	}
     //Add the dependency
     dependencies {
-	        implementation 'com.github.woaigmz:RxImagePicker:0.0.1'
+	        implementation 'com.github.woaigmz:RxImagePicker:0.0.2'
 	}
 ```
 ② 使用：不提供权限检测 //根据设置的ResultType 在回调里手动转换类型
@@ -34,12 +34,12 @@ requestPermissions(permissions, new PermissionListener() {
                 RxImagePicker
                         .source(MainActivity.this, new ImageLoaderInterface<ImageView>() {
                             @Override
-                            public void displayImage(Context context, String path, ImageView imageView) {
-                                GlideApp.with(context).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
+                            public void displayImage(Context context, String path, ImageView imageView, int width, int height, float scale) {
+                                ImageLoader.loadImageWithSize(context, imageView, path, width, height, scale);
                             }
                         })
                         .createFactory()
-                        .setGridColumn(5)
+                        .setGridColumn(3)
                         .setTheme(R.style.AppTheme)
                         .setPickedNum(9)
                         .setResultType(ResultType.PATH)
@@ -48,19 +48,19 @@ requestPermissions(permissions, new PermissionListener() {
                             public void onPicked(Object o) {
                                 List<String> list = (List<String>) o;
                                 String path = list.get(0);
-                                GlideApp.with(MainActivity.this).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(iv);
+                                ImageLoader.loadImageWithPath(MainActivity.this, iv, path);
                             }
 
                             @Override
                             public void onPhotoTook(Object o) {
                                 Log.d("111", o.toString());
                                 String path = (String) o;
-                                GlideApp.with(MainActivity.this).load(path).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(iv);
+                                ImageLoader.loadImageWithPath(MainActivity.this, iv, path);
                             }
 
                             @Override
                             public void onException(String msg) {
-                                Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
                         })
                         .build();

@@ -87,8 +87,7 @@ public class GridRVAdapter extends RecyclerView.Adapter<GridRVAdapter.GridViewHo
 
                 }
             });
-            int size = Utils.dp2px(context, L);
-            loader.displayImage(context, list.get(position - 1).path, holder.iv, size, size, 0.85f);
+            loader.displayImage(context, list.get(position - 1).path, holder.iv, L, L, 0.85f);
             holder.cv.setChecked(list.get(currentPos - 1).checked);
         } else {
             holder.tv.setOnClickListener(new View.OnClickListener() {

@@ -33,7 +33,6 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
     private CheckView checkView;
     private int currentPos;
     private List<Image> list;
-    private ViewPager.OnPageChangeListener listener;
     private ViewPager vp;
 
     public static void startPreviewChooseActivityForResult(Activity source, int themeId) {
@@ -78,8 +77,11 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
         bottom_left.setTextColor(colorStateListLeft);
         bottom_right.setTextColor(colorStateListRight);
 
-        bottom_left.setText("返回");
-        bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
+        bottom_left.setText(R.string.back);
+        String rightText = getString(R.string.use_start) +
+                Counter.getInstance().getCheckedList().size() +
+                getString(R.string.use_end);
+        bottom_right.setText(rightText);
 
     }
 
@@ -103,23 +105,8 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
     private void initListener() {
         bottom_left.setOnClickListener(this);
         bottom_right.setOnClickListener(this);
-        checkView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean flag = list.get(currentPos).checked;
-                if (flag) {
-                    checkView.setChecked(false);
-                    Counter.getInstance().resetCheckedStatus(list.get(currentPos), false);
-                    list.get(currentPos).checked = false;
-                } else {
-                    checkView.setChecked(true);
-                    Counter.getInstance().resetCheckedStatus(list.get(currentPos), true);
-                    list.get(currentPos).checked = true;
-                }
-                bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
-            }
-        });
-        listener = new WrapOnPageChangeListener() {
+        checkView.setOnClickListener(this);
+        ViewPager.OnPageChangeListener listener = new WrapOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -140,15 +127,27 @@ public class PreviewChooseActivity extends ThemeActivity implements View.OnClick
         int id = v.getId();
 
         if (id == R.id.footer_left) {
-            // 返回
+            // 点击返回
             setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON, null);
             finish();
 
         } else if (id == R.id.footer_right) {
-            // 使用
+            // 点击使用
             setResult(RESULT_PREVIEW_CHOOSE_ACTIVITY_USE_BUTTON, null);
             finish();
 
+        } else if (id == R.id.cv) {
+            // 点击 check view
+            boolean flag = list.get(currentPos).checked;
+            checkView.setChecked(!flag);
+            Counter.getInstance().resetCheckedStatus(list.get(currentPos), !flag);
+            list.get(currentPos).checked = !flag;
+            String text = getString(R.string.use_start) +
+                    Counter.getInstance().getCheckedList().size() +
+                    getString(R.string.use_end);
+            bottom_right.setText(text);
+
         }
+
     }
 }

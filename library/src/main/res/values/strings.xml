@@ -2,4 +2,13 @@
     <string name="app_name">library</string>
     <string name="all_images">所有图片</string>
     <string name="take_photo">点击拍照</string>
+    <string name="back">返回</string>
+    <string name="use_start">使用(</string>
+    <string name="use_end">)</string>
+    <string name="preview">预览</string>
+    <string name="use">使用</string>
+    <string name="please_choose_a_photo">请选择一张照片</string>
+    <string name="cancel_take_photo">拍照取消</string>
+    <string name="most_choose_count_start">您最多只能选择</string>
+    <string name="most_choose_count_end">张</string>
 </resources>

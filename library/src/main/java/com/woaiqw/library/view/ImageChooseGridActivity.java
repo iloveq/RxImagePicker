@@ -43,6 +43,8 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     private GridRVAdapter adapter;
     private TextView bottom_left, bottom_right;
     private int resultType;
+    private int gridColumn;
+    private int maxChooseNum;
 
 
     public static void startImageChooseGridActivityForResult(WeakReference<? extends Activity> source, int themeResId, int gridColumns, int resultType, int pickedNum) {
@@ -57,6 +59,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     public void onBodyCreated(View body, @Nullable Bundle savedInstanceState) {
         setBottomBar(body);
+        getRecyclerListConfigFromIntent();
         initRecyclerList(body);
         initListener();
         getResultTypeFromIntent();
@@ -87,17 +90,21 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
         bottom_left.setTextColor(colorStateListLeft);
         bottom_right.setTextColor(colorStateListRight);
 
-        bottom_left.setText("预览");
-        bottom_right.setText("使用");
+        bottom_left.setText(R.string.preview);
+        bottom_right.setText(R.string.use);
 
+    }
+
+    private void getRecyclerListConfigFromIntent() {
+        gridColumn = getIntent().getIntExtra(GRID_COLUMN, 3);
+        maxChooseNum = getIntent().getIntExtra(RESULT_NUM, 1);
     }
 
 
     private void initRecyclerList(View body) {
         RecyclerView rv = body.findViewById(R.id.rv);
-        int column = getIntent().getIntExtra(GRID_COLUMN, 3);
-        rv.setLayoutManager(new GridLayoutManager(this, column));
-        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), column, getIntent().getIntExtra(RESULT_NUM, 1), getColorPrimary());
+        rv.setLayoutManager(new GridLayoutManager(this, gridColumn));
+        adapter = new GridRVAdapter(this, ImagePickerFactory.getImageLoader(), gridColumn, maxChooseNum, getColorPrimary());
         rv.setAdapter(adapter);
     }
 
@@ -116,7 +123,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
             @Override
             public void onSuccess(List<Image> images) {
                 if (images == null || images.size() == 0) {
-                    Toast.makeText(ImageChooseGridActivity.this, "相册还没有照片哦！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ImageChooseGridActivity.this, R.string.please_choose_a_photo, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 adapter.setData(images);
@@ -140,7 +147,10 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     @Override
     public void onClickItem(View view, int position) {
-        bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
+        String text = getString(R.string.use_start) +
+                Counter.getInstance().getCheckedList().size() +
+                getString(R.string.use_end);
+        bottom_right.setText(text);
     }
 
     @Override
@@ -150,7 +160,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
     @Override
     public void onClickItemOutOfRange(int range) {
-        Toast.makeText(this, "最多选择：" + range + "张", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.most_choose_count_start) + range + getString(R.string.most_choose_count_end), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -164,14 +174,14 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
             if (tag) {
                 PreviewChooseActivity.startPreviewChooseActivityForResult(this, getThemeResId());
             } else {
-                Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.please_choose_a_photo, Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.footer_right) {
             // 使用
             if (tag) {
                 convertResultAndReturn(resultType);
             } else {
-                Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.please_choose_a_photo, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -181,7 +191,10 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     @Override
     protected void onResume() {
         super.onResume();
-        bottom_right.setText("使用(" + Counter.getInstance().getCheckedList().size() + ")");
+        String text = getString(R.string.use_start) +
+                Counter.getInstance().getCheckedList().size() +
+                getString(R.string.use_end);
+        bottom_right.setText(text);
         if (adapter != null)
             adapter.refresh();
 
@@ -195,7 +208,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
                 PhotoUtils.galleryAddPic(this, ImageController.get().getTakePhotoTempFile());
                 ImageController.get().convertTakePhotoResult(resultType);
             } catch (Exception e) {
-                Toast.makeText(this, "取消拍照", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.cancel_take_photo, Toast.LENGTH_SHORT).show();
             }
             finish();
         }
@@ -206,7 +219,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
                     convertResultAndReturn(resultType);
                     finish();
                 } else {
-                    Toast.makeText(this, "请选择照片", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_choose_a_photo, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case RESULT_PREVIEW_CHOOSE_ACTIVITY_BACK_BUTTON:

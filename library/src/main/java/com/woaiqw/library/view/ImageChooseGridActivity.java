@@ -119,6 +119,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
     }
 
     private void getAlbumImages() {
+
         ImageController.get().getSource(this, new ImageController.ImageControllerListener() {
             @Override
             public void onSuccess(List<Image> images) {
@@ -134,6 +135,7 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
                 Toast.makeText(ImageChooseGridActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 

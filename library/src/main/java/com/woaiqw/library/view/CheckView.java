@@ -20,6 +20,7 @@ import com.woaiqw.library.R;
 
 /**
  * Created by haoran on 2018/10/22.
+ * Thanks zhi hu
  */
 public class CheckView extends View {
 
@@ -41,7 +42,7 @@ public class CheckView extends View {
     private float mDensity;
     private Rect mCheckRect;
     private boolean mEnabled = true;
-    private int defalutColor = Color.parseColor("#1E8AE8");
+    private int defaultColor = Color.parseColor("#1E8AE8");
 
     public CheckView(Context context) {
         super(context);
@@ -87,7 +88,7 @@ public class CheckView extends View {
     }
 
     public void setBackGroundDefaultColor(int color){
-        defalutColor = color;
+        defaultColor = color;
     }
 
     public void setCountable(boolean countable) {
@@ -179,7 +180,7 @@ public class CheckView extends View {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setAntiAlias(true);
             mBackgroundPaint.setStyle(Paint.Style.FILL);
-            mBackgroundPaint.setColor(defalutColor);
+            mBackgroundPaint.setColor(defaultColor);
         }
     }
 

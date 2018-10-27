@@ -12,17 +12,19 @@ import java.lang.ref.WeakReference;
  */
 public class ImageChooseUI {
 
-    WeakReference<? extends Activity> source;
+    private WeakReference<? extends Activity> source;
 
     @StyleRes
+    private
     int theme;
 
-    int gridColumns;
+    private int gridColumns;
 
     @ResultType
+    private
     int resultType;
 
-    int pickedNum;
+    private int pickedNum;
 
     public ImageChooseUI(WeakReference<? extends Activity> source, @StyleRes int theme, int gridColumns, int resultType,int pickedNum) {
         this.source = source;

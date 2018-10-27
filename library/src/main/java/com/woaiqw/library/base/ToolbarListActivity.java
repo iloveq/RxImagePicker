@@ -1,5 +1,6 @@
 package com.woaiqw.library.base;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -18,9 +19,14 @@ public abstract class ToolbarListActivity extends ThemeActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toolbar_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
         onBodyCreated(findViewById(R.id.body), savedInstanceState);
+        setToolbar();
+    }
+
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getColorPrimary());
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

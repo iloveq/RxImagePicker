@@ -138,12 +138,18 @@ public class ImageChooseGridActivity extends ToolbarListActivity implements OnIt
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ImageController.get().release();
-        Counter.getInstance().clear();
+    protected void onPause() {
+        super.onPause();
+        if (isFinishing()) {
+            ImageController.get().release();
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Counter.getInstance().clear();
+    }
 
     @Override
     public void onClickItem(View view, int position) {

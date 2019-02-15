@@ -5,6 +5,8 @@ RxImagePicker
 
 ![pickImage.gif](https://upload-images.jianshu.io/upload_images/8886407-8051a2779827a117.gif?imageMogr2/auto-orient/strip)
 
+v0.0.6 增加裁剪功能
+
 ### 优点：
 ① rxjava2 实现读取相册和调用系统相机拍照，File - Uri - path 转换和线程切换
 ② 根据你设置的主题ui 图片选择界面和图片预览界面自适应
